@@ -1,12 +1,12 @@
 {
-    "name": "Conflictura",
-    "preductname": "Conflictura Launcher",
-    "version": "2.2.3",
-    "description": "Conflictura modded server launcher",
+    "name": "historion",
+    "preductname": "Historion Launcher",
+    "version": "1.0.1",
+    "description": "Launcher de Historion PvP Faction",
     "main": "src/app.js",
-    "author": "Luuxis/Riptiaz",
-    "url": "http://129.151.251.180",
-    "azauth": "https://conflictura.site",
+    "author": "Boulldogo",
+    "url": "https://launcher.historion-mc.fr",
+    "azauth": "https://historion-mc.fr",
     "engines": {
         "node": "16.x.x"
     },
@@ -36,6 +36,6 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Riptiaz/CentralCorp-Launcher.git"
+        "url": "git+https://github.com/Boulldog0/Historion-Launcher-v2.git"
     }
 }

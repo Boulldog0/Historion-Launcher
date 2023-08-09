@@ -116,7 +116,7 @@ class Home {
         if (!account.user_info.role.name) {
             document.querySelector(".admin-btn").style.display = "none";
         }
-        if (account.user_info.role.name != "Admin" ?? "Fondateur" ?? "Responsable Modo") {
+        if (account.user_info.role.name != "Admin" ?? "Fondateur" ?? "Responsable Administrateur" ?? "Modérateur" ?? "Super-Modérateur" ?? "Superviseur" ?? "Joueur") {
             document.querySelector(".admin-btn").style.display = "none";
         }
         
@@ -124,7 +124,7 @@ class Home {
 
         let blockRole = document.createElement("div");
         blockRole.innerHTML = `
-        <div>${account.user_info.role.name}</div>
+        <div>Grade: ${account.user_info.role.name}</div>
         `
         document.querySelector('.player-role').appendChild(blockRole);
         if(!account.user_info.role) {
@@ -134,44 +134,12 @@ class Home {
 
         let blockMonnaie = document.createElement("div");
         blockMonnaie.innerHTML = `
-        <div>${account.user_info.monnaie} pts</div>
+        <div>${account.user_info.monnaie} TK</div>
         `
         document.querySelector('.player-monnaie').appendChild(blockMonnaie);
         if(account.user_info.monnaie === "undefined") {
             document.querySelector(".player-monnaie").style.display = "none";
         }
-
-        
-
-        
-
-
-        if (account.role === "Responsable Modo") {
-            document.body.style.background = `linear-gradient(#00000066, #00000066) url(${this.config.homeimg_respmodo}) black no-repeat center center scroll`
-        }
-        if (account.role === "Membre") {
-            document.body.style.background = `linear-gradient(#00000066, #00000066) url(${this.config.homeimg_member}) black no-repeat center center scroll`
-        }
-        if (account.role === "Fondateur") {
-            document.body.style.background = `linear-gradient(#00000066, #00000066) url(${this.config.homeimg_fonda}) black no-repeat center center scroll`
-        }
-        if (account.role === "Dev") {
-            document.body.style.background = `linear-gradient(#00000066, #00000066), url("${this.config.homeimg_dev}") black no-repeat center center scroll`
-        }
-        if (account.role === "Admin") {
-            document.body.style.background = `linear-gradient(#00000066, #00000066) url(${this.config.homeimg_admin}) black no-repeat center center scroll`
-        }
-        if (account.role === "Helper") {
-            document.body.style.background = `linear-gradient(#00000066, #00000066) url(${this.config.homeimg_helper}) black no-repeat center center scroll`
-        }
-        if (account.role === "Modo") {
-            document.body.style.background = `linear-gradient(#00000066, #00000066) url(${this.config.homeimg_modo}) black no-repeat center center scroll`
-        }
-        if (account.role === "VIP") {
-            document.body.style.background = `linear-gradient(#00000066, #00000066) url(${this.config.homeimg_vip})  black no-repeat center center scroll`
-        }
-        
-       
     }
 
     async initLaunch() {
@@ -311,10 +279,6 @@ class Home {
         document.querySelector('.settings-btn').addEventListener('click', () => {
             changePanel('settings');
         });
-        document.querySelector('.admin-btn').addEventListener('click', () => {
-            const { shell } = require('electron')
-            shell.openExternal(`${azauth}/admin`)
-        })
     }
 
     async getdate(e) {

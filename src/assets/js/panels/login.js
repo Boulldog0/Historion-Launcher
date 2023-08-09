@@ -256,7 +256,7 @@ class Login {
                     loginBtn.disabled = false;
                     mailInput.disabled = false;
                     passwordInput.disabled = false;
-                    infoLogin.innerHTML = 'Adresse E-mail ou mot de passe invalide'
+                    infoLogin.innerHTML = 'Adresse E-mail ou mot de passe invalide/ Compte banni.'
                     return
                 }
                 cancelMojangBtn.addEventListener("click", () => {
@@ -308,7 +308,7 @@ class Login {
                 loginBtn.disabled = false;
                 mailInput.disabled = false;
                 passwordInput.disabled = false;
-                infoLogin.innerHTML = 'Adresse E-mail ou mot de passe invalide'
+                infoLogin.innerHTML = 'Adresse E-mail ou mot de passe invalide/ Compte banni.'
             })
         })
     }
@@ -393,7 +393,7 @@ class Login {
                 loginBtn.disabled = false;
                 mailInput.disabled = false;
                 passwordInput.disabled = false;
-                infoLogin.innerHTML = 'Adresse E-mail ou mot de passe invalide'
+                infoLogin.innerHTML = 'Adresse E-mail ou mot de passe invalide/ Compte banni.'
             })
         })
     }
