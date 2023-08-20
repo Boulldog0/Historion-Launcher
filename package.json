@@ -2,7 +2,7 @@
     "name": "historion",
     "preductname": "Historion Launcher",
     "version": "1.2.0",
-    "description": "Launcher de Historion PvP Faction",
+    "description": "Launcher de Historion PvP Faction moddé",
     "main": "src/app.js",
     "author": "Boulldogo/Riptiaz",
     "url": "https://launcher.historion-mc.fr",
