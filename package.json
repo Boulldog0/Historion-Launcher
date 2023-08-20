@@ -4,7 +4,7 @@
     "version": "1.2.0",
     "description": "Launcher de Historion PvP Faction",
     "main": "src/app.js",
-    "author": "Boulldogo",
+    "author": "Boulldogo/Riptiaz",
     "url": "https://launcher.historion-mc.fr",
     "azauth": "https://historion-mc.fr",
     "engines": {
