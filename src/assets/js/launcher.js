@@ -24,6 +24,7 @@ class Launcher {
         console.log("Initializing Launcher...");
         if (process.platform == "win32") this.initFrame();
         this.config = await config.GetConfig().then(res => res);
+        this.news = await config.GetNews().then(res => res);
         this.database = await new database().init();
         this.createPanels(Login, Home, Settings);
         this.getaccounts();
@@ -63,8 +64,6 @@ class Launcher {
         })
     }
 
-    
-
     createPanels(...panels) {
         let panelsElem = document.querySelector(".panels")
         for (let panel of panels) {
@@ -86,8 +85,8 @@ class Launcher {
         } else {
             for (let account of accounts) {
                 account = account.value;
-                if (account.meta.type === 'Mojang') {
-                    let refresh = await AZAuth.refresh(account);
+                if (account.meta.type === 'AZauth') {
+                    let refresh = await AZAuth.verify(account);
                     console.log(refresh);
                     console.log(`Initializing Mojang account ${account.name}...`);
                     let refresh_accounts;
@@ -101,7 +100,7 @@ class Launcher {
 
                     refresh_accounts = {
                         access_token: refresh.access_token,
-                        client_token: refresh.client_token,
+                        client_token: refresh.uuid,
                         uuid: refresh.uuid,
                         name: refresh.name,
                         user_properties: refresh.user_properties,
@@ -109,8 +108,10 @@ class Launcher {
                             type: refresh.meta.type,
                             offline: refresh.meta.offline
                         },
-                        role: refresh.role,
-                        monnaie: refresh.monnaie
+                        user_info: {
+                            role: refresh.user_info.role,
+                            monnaie: refresh.user_info.money,
+                        },
                     }
 
                     this.database.update(refresh_accounts, 'accounts');

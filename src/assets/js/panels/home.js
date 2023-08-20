@@ -113,10 +113,10 @@ class Home {
         let uuid = (await this.database.get('1234', 'accounts-selected')).value;
         let account = (await this.database.get(uuid.selected, 'accounts')).value;
         
-        if (!account.user_info.role.name) {
+        if (!account.user_info.role) {
             document.querySelector(".admin-btn").style.display = "none";
         }
-        if (account.user_info.role.name != "Admin" ?? "Fondateur" ?? "Responsable Administrateur" ?? "Modérateur" ?? "Super-Modérateur" ?? "Superviseur" ?? "Joueur") {
+        if (account.user_info.role.name != "Fondateur" ) {
             document.querySelector(".admin-btn").style.display = "none";
         }
         
@@ -134,12 +134,14 @@ class Home {
 
         let blockMonnaie = document.createElement("div");
         blockMonnaie.innerHTML = `
-        <div>${account.user_info.monnaie} TK</div>
+        <div>${account.user_info.monnaie} tk</div>
         `
         document.querySelector('.player-monnaie').appendChild(blockMonnaie);
         if(account.user_info.monnaie === "undefined") {
             document.querySelector(".player-monnaie").style.display = "none";
         }
+        
+       
     }
 
     async initLaunch() {
@@ -279,6 +281,10 @@ class Home {
         document.querySelector('.settings-btn').addEventListener('click', () => {
             changePanel('settings');
         });
+        document.querySelector('.admin-btn').addEventListener('click', () => {
+            const { shell } = require('electron')
+            shell.openExternal(`${azauth}/admin`)
+        })
     }
 
     async getdate(e) {

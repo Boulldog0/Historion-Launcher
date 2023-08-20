@@ -64,7 +64,7 @@ class Login {
 
                 let account = {
                     access_token: account_connect.access_token,
-                    client_token: account_connect.client_token,
+                    client_token: account_connect.uuid,
                     uuid: account_connect.uuid,
                     name: account_connect.name,
                     refresh_token: account_connect.refresh_token,
@@ -170,7 +170,7 @@ class Login {
                 }
                 let account = {
                     access_token: account_connect.access_token,
-                    client_token: account_connect.client_token,
+                    client_token: account_connect.uuid,
                     uuid: account_connect.uuid,
                     name: account_connect.name,
                     user_properties: account_connect.user_properties,
@@ -249,16 +249,15 @@ class Login {
 
                 }
                
-
-                if (account_connect.error) {
-       
+                if (account_connect.reason === 'user_banned') {
                     cancelMojangBtn.disabled = false;
                     loginBtn.disabled = false;
                     mailInput.disabled = false;
                     passwordInput.disabled = false;
-                    infoLogin.innerHTML = 'Adresse E-mail ou mot de passe invalide/ Compte banni.'
+                    infoLogin.innerHTML = 'Votre compte est banni ! Merci de vous rendre sur notre discord pour plus d\'informations.'
                     return
                 }
+                
                 cancelMojangBtn.addEventListener("click", () => {
                     document.querySelector(".login-card").style.display = "block";
                     document.querySelector(".login-card-mojang").style.display = "none";
@@ -269,7 +268,7 @@ class Login {
 
                 let account = {
                     access_token: account_connect.access_token,
-                    client_token: account_connect.client_token,
+                    client_token: account_connect.uuid,
                     uuid: account_connect.uuid,
                     name: account_connect.name,
                     user_properties: account_connect.user_properties,
@@ -308,7 +307,7 @@ class Login {
                 loginBtn.disabled = false;
                 mailInput.disabled = false;
                 passwordInput.disabled = false;
-                infoLogin.innerHTML = 'Adresse E-mail ou mot de passe invalide/ Compte banni.'
+                infoLogin.innerHTML = 'Adresse E-mail ou mot de passe invalide'
             })
         })
     }
@@ -362,7 +361,7 @@ class Login {
             Mojang.getAuth(mailInput.value, passwordInput.value).then(async account_connect => {
                 let account = {
                     access_token: account_connect.access_token,
-                    client_token: account_connect.client_token,
+                    client_token: account_connect.uuid,
                     uuid: account_connect.uuid,
                     name: account_connect.name,
                     user_properties: account_connect.user_properties,
@@ -393,7 +392,7 @@ class Login {
                 loginBtn.disabled = false;
                 mailInput.disabled = false;
                 passwordInput.disabled = false;
-                infoLogin.innerHTML = 'Adresse E-mail ou mot de passe invalide/ Compte banni.'
+                infoLogin.innerHTML = 'Adresse E-mail ou mot de passe invalide'
             })
         })
     }
