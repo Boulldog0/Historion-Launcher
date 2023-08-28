@@ -19,17 +19,17 @@ class Splash {
         this.progress = document.querySelector("progress");
         document.addEventListener('DOMContentLoaded', () => this.startAnimation());
     }
-
     async startAnimation() {
-        let splashes = [
-            { "message": "Je suis du code!", "author": "Riptiaz" },
-            { "message": "Ca se voit, t'es un bot", "author": "Benji_berelle" },
-            { "message": "Attends, ça arrive", "author": "Djanoto" },
-            { "message": "Keep calm Keep Smile", "author": "eclair18" },
-        ];
-        let splash = splashes[Math.floor(Math.random() * splashes.length)];
+        config.GetConfig().then(res => {
+            let splashes = [
+                { "message": res.splash, "author": res.splash_author },
+            ];
+            let splash = splashes[Math.floor(Math.random() * splashes.length)];
         this.splashMessage.textContent = splash.message;
         this.splashAuthor.children[0].textContent = "@" + splash.author;
+        })
+        
+        
         await sleep(100);
         document.querySelector("#splash").style.display = "block";
         await sleep(500);

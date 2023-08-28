@@ -119,7 +119,7 @@ class Login {
         let infoLogin2f = document.querySelector('.info-login-2f')
         let cancel2f = document.querySelector('.cancel-2f')
         
-        let azauth = pkg.user ? `${pkg.azauth}/${pkg.user}` : pkg.azauth
+        let azauth = this.config.azauth
         let newuserurl = `${azauth}/user/register`
         this.newuser = document.querySelector(".new-user");
         this.newuser.innerHTML="Pas de compte ?"
@@ -159,7 +159,6 @@ class Login {
                 infoLogin2f.innerHTML = "Entrez votre code a2f"
                 return
             }
-            let azauth = pkg.user ? `${pkg.azauth}/${pkg.user}` : pkg.azauth
             let azAuth = new AZauth(azauth);
 
             await azAuth.login(mailInput.value, passwordInput.value, a2finput.value).then(async account_connect => {
@@ -235,7 +234,6 @@ class Login {
                 passwordInput.disabled = false;
                 return
             }
-            let azauth = pkg.user ? `${pkg.azauth}/${pkg.user}` : pkg.azauth
             let azAuth = new AZauth(azauth);
 
             await azAuth.login(mailInput.value, passwordInput.value).then(async account_connect => {
@@ -254,7 +252,7 @@ class Login {
                     loginBtn.disabled = false;
                     mailInput.disabled = false;
                     passwordInput.disabled = false;
-                    infoLogin.innerHTML = 'Votre compte est banni ! Merci de vous rendre sur notre discord pour plus d\'informations.'
+                    infoLogin.innerHTML = 'Votre compte est banni. Merci de vous rendre sur notre discord pour plus d\'informations.'
                     return
                 }
                 

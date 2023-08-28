@@ -8,7 +8,6 @@ import database from './utils/database.js';
 import logger from './utils/logger.js';
 import slider from './utils/slider.js';
 const pkg = require('../package.json');
-let azauth = pkg.user ? `${pkg.azauth}/${pkg.user}` : pkg.azauth
 
 
 export {
@@ -29,6 +28,7 @@ function changePanel(id) {
 }
 
 function addAccount(data) {
+    let azauth = config.config.azauth;
     let div = document.createElement("div");
     div.classList.add("account");
     div.id = data.uuid;
@@ -52,5 +52,6 @@ function accountSelect(uuid) {
 }
 
 function headplayer(pseudo) {
+    let azauth = config.config.azauth;
     document.querySelector(".player-head").style.backgroundImage = `url(${azauth}/api/skin-api/avatars/face/${pseudo}/)`;
 }

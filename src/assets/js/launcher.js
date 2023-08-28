@@ -9,9 +9,8 @@
 const fs = require('fs');
 const { Microsoft, Mojang, AZauth } = require('minecraft-java-core');
 const pkg = require('../package.json');
-let azauth = pkg.user ? `${pkg.azauth}/${pkg.user}` : pkg.azauth
-const AZAuth = new AZauth(azauth);
 const { ipcRenderer } = require('electron');
+const DiscordRPC = require('discord-rpc');
 
 import { config, logger, changePanel, database, addAccount, accountSelect } from './utils.js';
 import Login from './panels/login.js';
@@ -28,6 +27,7 @@ class Launcher {
         this.database = await new database().init();
         this.createPanels(Login, Home, Settings);
         this.getaccounts();
+        this.initDiscordRPC();
     }
     
 
@@ -39,6 +39,29 @@ class Launcher {
         })
         new logger('Launcher', '#7289da')
     }
+    
+    initDiscordRPC() {
+        if (this.config.rpc_activation === true) {
+        const rpc = new DiscordRPC.Client({ transport: 'ipc' });
+        rpc.on('ready', () => {
+            const presence = {
+                details: this.config.rpc_details,
+                state: this.config.rpc_state,
+                largeImageKey: 'large',
+                largeImageText: this.config.rpc_large_text,
+                smallImageKey: 'small',
+                smallImageText: this.config.rpc_small_text,
+                buttons: [
+                    { label: this.config.rpc_button1, url: this.config.rpc_button1_url },
+                    { label: this.config.rpc_button2, url: this.config.rpc_button2_url }
+                ]
+            };
+            rpc.setActivity(presence);
+        });
+        rpc.login({ clientId: this.config.rpc_id }).catch(console.error);
+    }
+}
+
 
     initFrame() {
         console.log("Initializing Frame...")
@@ -77,6 +100,8 @@ class Launcher {
     }
 
     async getaccounts() {
+        let azauth = this.config.azauth
+        const AZAuth = new AZauth(azauth);
         let accounts = await this.database.getAll('accounts');
         let selectaccount = (await this.database.get('1234', 'accounts-selected'))?.value?.selected;
 

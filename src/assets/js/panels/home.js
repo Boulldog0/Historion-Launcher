@@ -17,9 +17,9 @@ const dataDirectory = process.env.APPDATA || (process.platform == 'darwin' ? `${
 class Home {
     static id = "home";
     async init(config, news) {
+        this.database = await new database().init();
         this.config = config
         this.news = await news
-        this.database = await new database().init();
         this.initNews();
         this.initLaunch();
         this.initStatusServer();
@@ -113,30 +113,26 @@ class Home {
         let uuid = (await this.database.get('1234', 'accounts-selected')).value;
         let account = (await this.database.get(uuid.selected, 'accounts')).value;
         
-        if (!account.user_info.role) {
-            document.querySelector(".admin-btn").style.display = "none";
-        }
-        if (account.user_info.role.name != "Fondateur" ) {
-            document.querySelector(".admin-btn").style.display = "none";
-        }
-        
-
-
         let blockRole = document.createElement("div");
+        if (this.config.role === true && account.user_info.role) {
+
         blockRole.innerHTML = `
         <div>Grade: ${account.user_info.role.name}</div>
         `
         document.querySelector('.player-role').appendChild(blockRole);
+        }
         if(!account.user_info.role) {
             document.querySelector(".player-role").style.display = "none";
         }
 
 
         let blockMonnaie = document.createElement("div");
+        if (this.config.money === true) {
         blockMonnaie.innerHTML = `
         <div>${account.user_info.monnaie} tk</div>
         `
         document.querySelector('.player-monnaie').appendChild(blockMonnaie);
+        }
         if(account.user_info.monnaie === "undefined") {
             document.querySelector(".player-monnaie").style.display = "none";
         }
@@ -170,7 +166,7 @@ class Home {
             }
 
             let opts = {
-                url: this.config.game_url === "" || this.config.game_url === undefined ? `${urlpkg}/files` : this.config.game_url,
+                url: `${this.config.ftp_url}/files`,
                 authenticator: account,
                 timeout: 10000,
                 path: `${dataDirectory}/${process.platform == 'darwin' ? this.config.dataDirectory : `.${this.config.dataDirectory}`}`,
@@ -277,14 +273,10 @@ class Home {
     }
 
     initBtn() {
-        let azauth = pkg.user ? `${pkg.azauth}/${pkg.user}` : pkg.azauth
+        let settings_url = pkg.user ? `${pkg.settings}/${pkg.user}` : pkg.settings
         document.querySelector('.settings-btn').addEventListener('click', () => {
             changePanel('settings');
         });
-        document.querySelector('.admin-btn').addEventListener('click', () => {
-            const { shell } = require('electron')
-            shell.openExternal(`${azauth}/admin`)
-        })
     }
 
     async getdate(e) {
@@ -296,4 +288,5 @@ class Home {
         return { year: year, month: allMonth[month - 1], day: day }
     }
 }
+
 export default Home;
