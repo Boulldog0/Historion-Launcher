@@ -50,7 +50,7 @@ class Splash {
             else this.checkUpdate();
         }).catch(e => {
             console.error(e);
-            return this.shutdown("Aucune connexion internet détectée,<br>veuillez réessayer ultérieurement.");
+            return this.shutdown("Aucune connexion internet détectée,<br>veuillez réessayer ultérieurement. Si vous restez coincé sur cette page, rejoingnez notre discord pour obtenir de l'aide.");
         })
     }
 

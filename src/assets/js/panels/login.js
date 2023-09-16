@@ -252,7 +252,7 @@ class Login {
                     loginBtn.disabled = false;
                     mailInput.disabled = false;
                     passwordInput.disabled = false;
-                    infoLogin.innerHTML = 'Votre compte est banni. Merci de vous rendre sur notre discord pour plus d\'informations.'
+                    infoLogin.innerHTML = 'Votre compte est banni. Merci de vous rendre sur notre discord pour toute contestation.'
                     return
                 }
                 
