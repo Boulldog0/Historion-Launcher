@@ -205,7 +205,7 @@ class Home {
                 path: `${dataDirectory}/${process.platform == 'darwin' ? this.config.dataDirectory : `.${this.config.dataDirectory}`}`,
                 version: this.config.game_version,
                 detached: launcherSettings.launcher.close === 'close-all' ? false : true,
-                downloadFileMultiple: 30,
+                downloadFileMultiple: 2,
                 loader: {
                     type: this.config.loader.type,
                     build: this.config.loader.build,
