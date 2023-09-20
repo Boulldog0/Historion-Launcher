@@ -136,6 +136,39 @@ class Home {
         if(account.user_info.monnaie === "undefined") {
             document.querySelector(".player-monnaie").style.display = "none";
         }
+        if (this.config.whitelist_activate === true) {
+        if (!this.config.whitelist.includes(account.name)) {
+            document.querySelector(".play-btn").style.backgroundColor = "#AB9E9E"; // Couleur de fond grise
+            document.querySelector(".play-btn").style.pointerEvents = "none"; // Désactiver les événements de souris
+            document.querySelector(".play-btn").style.boxShadow = "none";
+            document.querySelector(".play-btn").textContent = "Non whitelist";   ;    
+        }
+    }
+        
+        if (account.user_info.role.name === this.config.role_data.role1.name) {
+            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role1.background}) black no-repeat center center scroll`;
+        }
+        if (account.user_info.role.name === this.config.role_data.role2.name) {
+            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role2.background}) black no-repeat center center scroll`;
+        }
+        if (account.user_info.role.name === this.config.role_data.role3.name) {
+            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role3.background}) black no-repeat center center scroll`;
+        }
+        if (account.user_info.role.name === this.config.role_data.role4.name) {
+            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role4.background}) black no-repeat center center scroll`;
+        }
+        if (account.user_info.role.name === this.config.role_data.role5.name) {
+            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role5.background}) black no-repeat center center scroll`;
+        }
+        if (account.user_info.role.name === this.config.role_data.role6.name) {
+            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role6.background}) black no-repeat center center scroll`;
+        }
+        if (account.user_info.role.name === this.config.role_data.role7.name) {
+            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role7.background}) black no-repeat center center scroll`;
+        }
+        if (account.user_info.role.name === this.config.role_data.role8.name) {
+            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role8.background}) black no-repeat center center scroll`;
+        }
         
        
     }
@@ -166,20 +199,18 @@ class Home {
             }
 
             let opts = {
-                url: `${this.config.ftp_url}/files`,
+                url: `${pkg.settings}/data`,
                 authenticator: account,
                 timeout: 10000,
                 path: `${dataDirectory}/${process.platform == 'darwin' ? this.config.dataDirectory : `.${this.config.dataDirectory}`}`,
                 version: this.config.game_version,
                 detached: launcherSettings.launcher.close === 'close-all' ? false : true,
-                downloadFileMultiple: 1,
+                downloadFileMultiple: 30,
                 loader: {
                     type: this.config.loader.type,
                     build: this.config.loader.build,
                     enable: this.config.loader.enable,
                 },
-                
-
                 verify: this.config.verify,
                 ignored: this.config.ignored,
 
