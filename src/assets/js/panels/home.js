@@ -201,7 +201,7 @@ class Home {
             let opts = {
                 url: `${pkg.settings}/data`,
                 authenticator: account,
-                timeout: 10000,
+                timeout: 15000,
                 path: `${dataDirectory}/${process.platform == 'darwin' ? this.config.dataDirectory : `.${this.config.dataDirectory}`}`,
                 version: this.config.game_version,
                 detached: launcherSettings.launcher.close === 'close-all' ? false : true,
