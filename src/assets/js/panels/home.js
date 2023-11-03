@@ -197,7 +197,7 @@ class Home {
                     height: Resolution.screen.height
                 }
             }
-
+            
             let opts = {
                 url: `${pkg.settings}/data`,
                 authenticator: account,
@@ -308,6 +308,20 @@ class Home {
         document.querySelector('.settings-btn').addEventListener('click', () => {
             changePanel('settings');
         });
+
+        document.getElementById("discord").addEventListener("click", function() {
+            window.open("https://discord.gg/smxDYcDks2", "_blank");
+        });
+
+        document.getElementById("boutique").addEventListener("click", function() {
+            window.open("https://historion-mc.fr/shop", "_blank");
+        });
+
+        document.getElementById("vote").addEventListener("click", function() {
+            window.open("https://historion-mc.fr/vote", "_blank");
+        });
+        
+        
     }
 
     async getdate(e) {

@@ -22,28 +22,28 @@
     border: none;
     margin: 2% 0;
     height: 2em;
-    background-color: #00bd7a;
-    box-shadow: 0 0 5px #00bd7a;
-    color: #121212;
+    background-color: #0f1161;
+    box-shadow: 0 0 5px #0f1161;
+    color: #d6d4d4;
     font: normal normal bold 19px/29px Poppins;
     cursor: pointer;
 }
 
 
 .login-type-btn:hover {
-    background-color: #006e47;
-    box-shadow: 0 0 5px #006e47;
+    background-color: #0d0e3f;
+    box-shadow: 0 0 5px #0d0e3f;
 }
 
 .login-type-btn:disabled {
-    background-color: #00bd7a;
-    box-shadow: 0 0 5px #00bd7a;
+    background-color: #0f1161;
+    box-shadow: 0 0 5px #0f1161;
     cursor: default;
 }
 
 .login-type-btn:disabled:hover {
-    background-color: #00bd7a;
-    box-shadow: 0 0 5px #00bd7a;
+    background-color: #0f1161;
+    box-shadow: 0 0 5px #0f1161;
 }
 
 .microsoft {
@@ -62,6 +62,15 @@
     color: #E1E1E1;
     border-radius: 15px;
     display: none;
+}
+
+.logo1 {
+    position: absolute;
+    background-image: url("../../images/logo.png");
+    top: -60px;
+    left: 180px;
+    width: 128px;
+    height: 128px;
 }
 
 .card-body {
@@ -99,16 +108,16 @@
     border: none;
     margin: 2% 0;
     height: 2em;
-    background-color: #00bd7a;
-    box-shadow: 0 0 5px #00bd7a;
-    color: #121212;
+    background-color: #0f1161;
+    box-shadow: 0 0 5px #0f1161;
+    color: #d6d4d4;
     font: normal normal bold 19px/29px Poppins;
     cursor: pointer;
 }
 
 .login-btn:hover {
-    background-color: #006e47;
-    box-shadow: 0 0 5px #006e47;
+    background-color: #0d0e3f;
+    box-shadow: 0 0 5px #0d0e3f;
 }
 
 .cancel {
@@ -120,7 +129,7 @@
 }
 
 .cancel:hover {
-    color: #373737;
+    color: #b81c1c;
 }
 
 .cancel:hover:disabled {
@@ -134,22 +143,48 @@
     text-decoration: none;
 }
 
+.password-reset:hover {
+    cursor: pointer;
+    color: #cfc4c4;
+    text-decoration: none;
+}
+
 .new-user {
     cursor: pointer;
     color: #fff;
     text-decoration: none;
 }
+
+.new-user:hover {
+    cursor: pointer;
+    color: #cfc4c4;
+    text-decoration: none;
+}
+
 .login-btn-2f {
     border-radius: 15px;
     border: none;
     margin: 2% 0;
     height: 2em;
-    background-color: #00bd7a;
-    box-shadow: 0 0 5px #00bd7a;
-    color: #121212;
+    background-color: #0f1161;
+    box-shadow: 0 0 5px #0f1161;
+    color: #d6d4d4;
     font: normal normal bold 19px/29px Poppins;
     cursor: pointer;
 }
+
+.login-btn-2f:hover {
+    background-color: #0d0e3f;
+    box-shadow: 0 0 5px #0d0e3f;
+}
+
+.info-login {
+    border: none;
+    position: absolute;
+    top: 100px;
+    color: #bd1919;
+}
+
 .a2f-card {
     position: absolute;
     top: 52%;
@@ -171,5 +206,5 @@
     cursor: pointer;
 }
 .cancel-2f:hover {
-    color: #373737;
+    color: #b81c1c;
 } 

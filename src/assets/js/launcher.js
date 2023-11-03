@@ -53,7 +53,6 @@ class Launcher {
                 smallImageText: this.config.rpc_small_text,
                 buttons: [
                     { label: this.config.rpc_button1, url: this.config.rpc_button1_url },
-                    { label: this.config.rpc_button2, url: this.config.rpc_button2_url }
                 ]
             };
             rpc.setActivity(presence);

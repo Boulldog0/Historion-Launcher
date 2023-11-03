@@ -112,6 +112,7 @@ class Login {
         let passwordInput = document.querySelector('.Password')
         let cancelMojangBtn = document.querySelector('.cancel-mojang')
         let infoLogin = document.querySelector('.info-login')
+        let infoConnect = document.querySelector('.info-connect')
         let loginBtn = document.querySelector(".login-btn")
         let mojangBtn = document.querySelector('.mojang')
         let loginBtn2f = document.querySelector('.login-btn-2f')
@@ -156,7 +157,7 @@ class Login {
 
         loginBtn2f.addEventListener("click", async() => {
          if (a2finput.value == "") {
-                infoLogin2f.innerHTML = "Entrez votre code a2f"
+                infoLogin2f.innerHTML = "Entrez votre code A2F"
                 return
             }
             let azAuth = new AZauth(azauth);
@@ -164,7 +165,7 @@ class Login {
             await azAuth.login(mailInput.value, passwordInput.value, a2finput.value).then(async account_connect => {
                 console.log(account_connect);
                 if (account_connect.error) {
-                    infoLogin2f.innerHTML = 'Code a2f invalide'
+                    infoLogin2f.innerHTML = 'Votre code A2F est invalide'
                     return
                 }
                 let account = {
@@ -252,7 +253,7 @@ class Login {
                     loginBtn.disabled = false;
                     mailInput.disabled = false;
                     passwordInput.disabled = false;
-                    infoLogin.innerHTML = 'Votre compte est banni. Merci de vous rendre sur notre discord pour toute contestation.'
+                    infoLogin.innerHTML = 'Votre compte est banni. <br>Merci de vous rendre sur notre discord pour toute contestation.'
                     return
                 }
                 
@@ -305,7 +306,7 @@ class Login {
                 loginBtn.disabled = false;
                 mailInput.disabled = false;
                 passwordInput.disabled = false;
-                infoLogin.innerHTML = 'Adresse E-mail ou mot de passe invalide'
+                infoLogin.innerHTML = 'Adresse E-mail/Pseudo ou mot de passe invalide'
             })
         })
     }
@@ -390,7 +391,7 @@ class Login {
                 loginBtn.disabled = false;
                 mailInput.disabled = false;
                 passwordInput.disabled = false;
-                infoLogin.innerHTML = 'Adresse E-mail ou mot de passe invalide'
+                infoLogin.innerHTML = 'Adresse E-mail ou mot de passe invalide.'
             })
         })
     }

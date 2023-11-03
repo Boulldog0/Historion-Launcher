@@ -213,11 +213,11 @@ class Settings {
             this.database.update(settingsLauncher, 'launcher');
         })
     }
-
+    
     initTab() {
         let TabBtn = document.querySelectorAll('.tab-btn');
         let TabContent = document.querySelectorAll('.tabs-settings-content');
-
+    
         for (let i = 0; i < TabBtn.length; i++) {
             TabBtn[i].addEventListener('click', () => {
                 if (TabBtn[i].classList.contains('save-tabs-btn')) return
@@ -229,12 +229,17 @@ class Settings {
                 TabBtn[i].classList.add('active-tab-btn');
             });
         }
-
+    
         document.querySelector('.save-tabs-btn').addEventListener('click', () => {
             document.querySelector('.default-tab-btn').click();
             changePanel("home");
-        })
+        });
+    
+        document.getElementById("github").addEventListener("click", function() {
+            window.open("https://github.com/Boulldog0/Historion-Launcher", "_blank");
+        });
     }
+    
 
     async initSettingsDefault() {
         if (!(await this.database.getAll('accounts-selected')).length) {

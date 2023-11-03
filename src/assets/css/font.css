@@ -87,10 +87,65 @@
     content: "\e902";
 }
 
+.icon-account-button:before {
+    font-family: "Icons";
+    content: "\e972";
+}
+
 .icon-settings:before {
     font-family: "Icons";
     content: "\e909";
 }
+.icon-play:before {
+    font-family: "Iconn";
+    content: "\ea15";
+  }
+
+.icon-cart:before {
+    font-family: "Iconn";
+    content: "\e93a";
+  }
+
+  .icon-coin-dollar:before {
+    font-family: "Iconn";
+    content: "\e93b";
+  }
+
+  .icon-bubbles2:before {
+    font-family: "Iconn";
+    content: "\e96d";
+  }
+
+  .icon-users:before {
+    font-family: "Iconn";
+    content: "\e972";
+  }
+
+  .icon-terminal:before {
+    font-family: "Iconn";
+    content: "\ea81";
+  }
+
+  .icon-wrench:before {
+    font-family: "Iconn";
+    content: "\e991";
+  }
+
+  .icon-rocket:before {
+    font-family: "Iconn";
+    content: "\e9a5";
+  }
+
+  .icon-upload3:before {
+    font-family: "Iconn";
+    content: "\e9c8";
+  }
+
+  .icon-github:before {
+    font-family: "Iconn";
+    content: "\eab0";
+  }
+
 .icon-admin:before {
     font-family: "Iconn";
     content: "\e991";

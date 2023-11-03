@@ -14,32 +14,95 @@ body {
 }
 
 .tab-btn-css {
-    /* border-radius: 23px; */
-    width: 160px;
-    height: 37px;
-    margin: 10px 30px;
-    background: #00bd7a;
-    border: 4px solid #00bd7a;
+    border-radius: 15px;
+    width: 170px;
+    height: 45px;
+    margin: 10px 10px;
+    color: #D1D1D1;
+    background: #0f1161;
+    border: 4px solid #0f1161;
     text-align: left;
     cursor: pointer;
-    box-shadow: 0 0 5px #bd0000;
+    box-shadow: 0 0 5px #0f1161;
     outline: none;
 }
 
+.tab-btn-mods {
+    border-radius: 15px;
+    width: 170px;
+    height: 45px;
+    margin: 10px 10px;
+    color: #D1D1D1;
+    background: #0f1161;
+    border: 4px solid #0f1161;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: 0 0 5px #0f1161;
+    outline: none;
+}
+
+.tab-btn-git {
+    position: absolute;
+    border-radius: 15px;
+    width: 170px;
+    height: 45px;
+    margin: 10px 10px;
+    top: 635px;
+    color: #D1D1D1;
+    background: #0f1161;
+    border: 4px solid #0f1161;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: 0 0 5px #0f1161;
+    outline: none;
+}
+
+.tab-btn-git:hover {
+    background: #1b1455;
+    box-shadow: 0 0 5px 1 #1b1455;
+    border: 4px solid #1b1455;
+}
+
+.tab-btn-mods:hover {
+    background: #1b1455;
+    box-shadow: 0 0 5px 1 #1b1455;
+    border: 4px solid #1b1455;
+}
+
+.tab-btn-css-settings {
+    border-radius: 15px;
+    width: 170px;
+    height: 45px;
+    margin: 10px 10px;
+    color: #D1D1D1;
+    font: normal normal bold 19px/29px Poppins;
+    background: #12610f;
+    border: 4px solid #12610f;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 0 5px #12610f;
+    outline: none;
+}
+
+.tab-btn-css-settings:hover {
+    background: #1da119;
+    box-shadow: 0 0 5px 1 #1da119;
+    border: 4px solid #1da119;
+}
+
 .tab-btn-css:hover {
-    background: #006e47;
-    box-shadow: 0 0 5px #006e47;
-    border: 4px solid #006e47;
+    background: #1b1455;
+    box-shadow: 0 0 5px 1 #1b1455;
+    border: 4px solid #1b1455;
 }
 
 .active-tab-btn {
-    background: #006e47;
-    border: 4px solid #FFFFFF;
-    box-shadow: 0 0 5px #ffffff;
+    background: #0f1161;
+    box-shadow: 0 0 5px #d6d4d4;
 }
 
 .active-tab-btn:hover {
-    background: #006e47;
+    background: #0f1161;
     border: 4px solid #ffffff;
     box-shadow: 0 0 5px #ffffff;
 }
@@ -63,6 +126,14 @@ body {
     pointer-events: all;
 }
 
+.optional-mod-option {
+    margin-bottom: 10px;
+}
+
+.mod-description {
+    margin-left: 10px;
+}
+
 .information {
     padding: 0 40px;
     font: normal normal normal 16px/25px Poppins;
@@ -72,7 +143,7 @@ body {
 .title-settings {
     text-align: center;
     font: normal normal bold 20px/25px Apocalyps;
-    color: #F1F1F1;
+    color: #d6d4d4;
     margin: 2% 0;
 }
 
@@ -98,6 +169,17 @@ body {
     width: 100%;
 }
 
+.settings-btn {
+    position: absolute;
+    top: 10px;
+    right: 100px;
+    text-align: center;
+    height: 50px;
+    border: none;
+    border-radius: 15px;
+    transition: all 0.5s cubic-bezier(1, 0.46, 0, 1.29);
+}
+
 
 /*******************************************************************************
  *                                                                             *
@@ -113,7 +195,19 @@ body {
     font: normal normal bold 30px/40px Poppins;
     color: #D1D1D1;
     background-color: #303030;
-    box-shadow: 1px 2px 5px #585858;
+    margin: 20px 0;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.add-account:hover {
+    width: 80%;
+    height: 10%;
+    border: none;
+    border-radius: 15px;
+    font: normal normal bold 30px/40px Poppins;
+    color: #D1D1D1;
+    background-color: #413f3f;
     margin: 20px 0;
     margin-bottom: 10px;
     cursor: pointer;
@@ -126,9 +220,9 @@ body {
 
 .account {
     display: inline-block;
-    background: #00bd7a;
-    box-shadow: 0 0 5px #006e47;
-    border: 4px solid #00bd7a;
+    background: #0785ce;
+    box-shadow: 0 0 5px #0785ce;
+    border: 4px solid #0785ce;
     font: normal normal bold 30px/40px Poppins;
     width: 500px;
     height: 100px;
@@ -138,9 +232,9 @@ body {
 }
 
 .account:hover {
-    background: #006e47;
-    box-shadow: 0 0 5px #006e47;
-    border: 4px solid #006e47;
+    background: #0785ce;
+    box-shadow: 0 0 5px #0785ce;
+    border: 4px solid #0785ce;
 }
 
 .account-image {
@@ -192,13 +286,13 @@ body {
 }
 
 .active-account {
-    background: #006e47;
+    background: #0e6292;
     border: 4px solid #ffffff;
     box-shadow: 0 0 5px #ffffff;
 }
 
 .active-account:hover {
-    background: #006e47;
+    background: #1273ac;
     border: 4px solid #ffffff;
     box-shadow: 0 0 5px #ffffff;
 }
@@ -236,13 +330,23 @@ body {
     z-index: 2;
 }
 
-.slider-touch-left span,
+.slider-touch-left span {
+    display: block;
+    width: 20px;
+    height: 10px;
+    background: #292929;
+    border: 4px solid #a71914;
+    transition: background-color .2s, border .2s;
+    border-radius: 18px;
+    cursor: pointer;
+}
+
 .slider-touch-right span {
     display: block;
     width: 20px;
     height: 10px;
-    background: #F1F1F1;
-    border: 4px solid #00bd7a;
+    background: #292929;
+    border: 4px solid #08ac10;
     transition: background-color .2s, border .2s;
     border-radius: 18px;
     cursor: pointer;
@@ -251,7 +355,7 @@ body {
 .slider-touch-left span:after,
 .slider-touch-right span:after {
     content: attr(value);
-    color: #00bd7a;
+    color: #D1D1D1;
     font: normal normal bold 12px/18px Poppins;
     white-space: nowrap;
     pointer-events: none;
@@ -279,7 +383,7 @@ body {
     display: block;
     height: 100%;
     width: 0%;
-    background: #00bd7a;
+    background: #D1D1D1;
     transition: background-color .2s;
 }
 
@@ -287,7 +391,7 @@ body {
     display: flex;
     align-items: center;
     font: normal normal bold 15px/25px Poppins;
-    color: #F1F1F1F1;
+    color: #D1D1D1;
 }
 
 .path {
@@ -297,7 +401,7 @@ body {
     padding: 8px 16px;
     margin: 0 40px;
     margin-top: 2%;
-    color: #F1F1F1F1;
+    color: #0f1161;
     background-color: #1f1f1f;
     user-select: text;
     transition: color .2s, background-color .2s;
@@ -466,7 +570,7 @@ body {
 }
 
 .checkbox-settings:checked+label {
-    background-color: #00bd7a;
+    background-color: #0f1161;
 }
 
 .checkround {
