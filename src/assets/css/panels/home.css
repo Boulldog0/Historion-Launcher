@@ -158,11 +158,11 @@
     height: 37px;
     border-radius: 20px;
     border: none;
-    background: #f1540b;
+    background: #0f1161;
     font: normal normal bold 20px/25px Poppins;
     color: #121212;
     margin: 15px 0;
-    box-shadow: 0 0 5px #f1540b;
+    box-shadow: 0 0 5px #0f1161;
     cursor: pointer;
 }
 
@@ -193,7 +193,7 @@
 }
 
 .progress-bar::-webkit-progress-value {
-    background-color: #f1540b;
+    background-color: rgb(13, 112, 10);
     border-radius: 10px;
 }
 

@@ -199,13 +199,13 @@ class Home {
             }
             
             let opts = {
-                url: `${pkg.settings}/data`,
+                url: `http://154.51.39.122:50001`,
                 authenticator: account,
                 timeout: 15000,
                 path: `${dataDirectory}/${process.platform == 'darwin' ? this.config.dataDirectory : `.${this.config.dataDirectory}`}`,
                 version: this.config.game_version,
                 detached: launcherSettings.launcher.close === 'close-all' ? false : true,
-                downloadFileMultiple: 2,
+                downloadFileMultiple: 20,
                 loader: {
                     type: this.config.loader.type,
                     build: this.config.loader.build,
