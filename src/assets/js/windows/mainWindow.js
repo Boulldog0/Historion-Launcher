@@ -26,20 +26,21 @@ function createWindow() {
         title: pkg.preductname,
         width: 1280,
         height: 720,
-        minWidth: 980,
-        minHeight: 552,
+        minWidth: 1280,
+        minHeight: 720,
         resizable: true,
         icon: `./src/assets/images/icon.${os.platform() === "win32" ? "ico" : "png"}`,
-        transparent: os.platform() === 'win32',
-        frame: os.platform() !== 'win32',
+        frame: false,
         show: false,
         webPreferences: {
             contextIsolation: false,
-            nodeIntegration: true
+            nodeIntegration: true,
+            webSecurity: true,
         },
     });
     electron.Menu.setApplicationMenu(null);
     mainWindow.setMenuBarVisibility(false);
+    mainWindow.setBackgroundColor('rgba(0, 0, 0, 0)'),
     mainWindow.loadFile(path.join(electron.app.getAppPath(), 'src', 'launcher.html'));
     mainWindow.once('ready-to-show', () => {
         if (mainWindow) {

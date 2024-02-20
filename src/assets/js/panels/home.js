@@ -129,7 +129,7 @@ class Home {
         let blockMonnaie = document.createElement("div");
         if (this.config.money === true) {
         blockMonnaie.innerHTML = `
-        <div>${account.user_info.monnaie} tk</div>
+        <div>${account.user_info.monnaie} Tokens</div>
         `
         document.querySelector('.player-monnaie').appendChild(blockMonnaie);
         }
@@ -188,6 +188,7 @@ class Home {
             let playBtn = document.querySelector('.play-btn');
             let info = document.querySelector(".text-download")
             let progressBar = document.querySelector(".progress-bar")
+            let latenceBar = document.querySelector(".latence-bar")
 
             if (Resolution.screen.width == '<auto>') {
                 screen = false
@@ -252,7 +253,7 @@ class Home {
             })
 
             launch.on('speed', (speed) => {
-                console.log(`${(speed / 1067008).toFixed(2)} Mb/s`)
+                console.log(`${(speed / 1067008).toFixed(2)} Mb/s`);
             })
 
             launch.on('patch', patch => {

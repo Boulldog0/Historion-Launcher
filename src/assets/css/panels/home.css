@@ -100,6 +100,7 @@
     color: #E1E1E1;
     margin: auto 15px;
 }
+
 .player-monnaie {
     font: normal normal bold 24px/35px Poppins;
     text-overflow: ellipsis;
@@ -143,9 +144,9 @@
 
 .play-element {
     position: absolute;
-    left: 50%;
     transform: translate(-50%);
     height: 100%;
+    margin-top: 15%;
     color: #F1F1F1;
     font: normal normal bold 19px/29px Poppins;
     text-align: center;
@@ -154,23 +155,28 @@
 .icon-play,
 .play-btn {
     top: 10px;
-    width: 160px;
-    height: 37px;
+    width: 200px;
+    height: 45px;
     border-radius: 20px;
     border: none;
-    background: #0f1161;
-    font: normal normal bold 20px/25px Poppins;
+    background: #3436a3;
+    font: normal normal bold 25px/30px Poppins;
     color: #121212;
     margin: 15px 0;
-    box-shadow: 0 0 5px #0f1161;
+    box-shadow: 0 0 5px #3436a3;
     cursor: pointer;
+}
+
+.play-btn:hover {
+    background: #1f2081;
 }
 
 .download-content {
     position: absolute;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    width: 200px;
+    left: 100%;
+    transform: translate(-25%, -25%);
 }
 
 .text-download,
@@ -179,7 +185,8 @@
 }
 
 .text-download {
-    font-size: 15px;
+    font-size: 17px;
+    left: -2px;
 }
 
 .progress-bar {
@@ -208,8 +215,8 @@
     overflow: auto;
     width: 50%;
     left: 10px;
-    top: 140px;
-    height: 400px;
+    top: 250px;
+    height: 60%;
 }
 
 .news-list::-webkit-scrollbar {
@@ -334,9 +341,8 @@
 }
 
 .info-list {
-    position: relative;
-    width: 65vh;
-    padding-left: 1rem;
+    position: fixed;
+    right: 85px;
     background: none;
 }
 
@@ -344,7 +350,7 @@
     position: relative;
     width: 80%;
     height: 75px;
-    right: -150px;
+    left: 32.5%;
     background-color: #292929;
     border-radius: 10px;
     transition: opacity 1s;
@@ -352,6 +358,17 @@
 }
 
 .changelog {
+    position: relative;
+    width: 80%;
+    margin-top: 10px;
+    right: -150px;
+    background-color: #292929;
+    border-radius: 10px;
+    transition: opacity 1s;
+    opacity: .8;
+}
+
+.link {
     position: relative;
     width: 80%;
     margin-top: 10px;
@@ -419,8 +436,8 @@
     top: 100px;
     right: 50px;
     width: 300px;
-    background-color: #0f1161;
-    box-shadow: 0 0 5px #0f1161;
+    background-color: #3436a3;
+    box-shadow: 0 0 5px #3436a3;
     color: #d6d4d4;
     font: normal normal bold 19px/29px Poppins;
     margin-bottom: 50px;
@@ -428,8 +445,8 @@
 }
 
 .button:hover {
-    background-color: #0d0e3f;
-    box-shadow: 0 0 5px #0d0e3f;
+    background-color: #1f2081;
+    box-shadow: 0 0 5px #1f2081;
 }
 
 .button-2 {
@@ -441,8 +458,8 @@
     top: 210px;
     right: 50px;
     width: 300px;
-    background-color: #0f1161;
-    box-shadow: 0 0 5px #0f1161;
+    background-color: #3436a3;
+    box-shadow: 0 0 5px #3436a3;
     color: #d6d4d4;
     font: normal normal bold 19px/29px Poppins;
     margin-bottom: 50px;
@@ -450,8 +467,8 @@
 }
 
 .button-2:hover {
-    background-color: #0d0e3f;
-    box-shadow: 0 0 5px #0d0e3f;
+    background-color: #1f2081;
+    box-shadow: 0 0 5px #1f2081;
 }
 
 .logo {
@@ -561,26 +578,6 @@
 
 .online.off {
     background-color: #c70707;
-}
-
-/*Génération de neige pour l'hiver*/
-
-.snowfall {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    background: transparent;
-    animation: falling 10s linear infinite;
-}
-
-.snowflake {
-    position: absolute;
-    background: #fff;
-    border-radius: 50%;
-    opacity: 0.7;
 }
 
 @keyframes falling {

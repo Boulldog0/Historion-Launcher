@@ -19,11 +19,11 @@ body {
     height: 45px;
     margin: 10px 10px;
     color: #D1D1D1;
-    background: #0f1161;
-    border: 4px solid #0f1161;
+    background: #1f2081;
+    border: 4px solid #1f2081;
     text-align: left;
     cursor: pointer;
-    box-shadow: 0 0 5px #0f1161;
+    box-shadow: 0 0 5px #1f2081;
     outline: none;
 }
 
@@ -33,11 +33,11 @@ body {
     height: 45px;
     margin: 10px 10px;
     color: #D1D1D1;
-    background: #0f1161;
-    border: 4px solid #0f1161;
+    background: #1f2081;
+    border: 4px solid #1f2081;
     text-align: left;
     cursor: pointer;
-    box-shadow: 0 0 5px #0f1161;
+    box-shadow: 0 0 5px #1f2081;
     outline: none;
 }
 
@@ -49,24 +49,24 @@ body {
     margin: 10px 10px;
     top: 635px;
     color: #D1D1D1;
-    background: #0f1161;
-    border: 4px solid #0f1161;
+    background: #1f2081;
+    border: 4px solid #1f2081;
     text-align: left;
     cursor: pointer;
-    box-shadow: 0 0 5px #0f1161;
+    box-shadow: 0 0 5px #1f2081;
     outline: none;
 }
 
 .tab-btn-git:hover {
-    background: #1b1455;
-    box-shadow: 0 0 5px 1 #1b1455;
-    border: 4px solid #1b1455;
+    background: #3436a3;
+    box-shadow: 0 0 5px 1 #3436a3;
+    border: 4px solid #3436a3;
 }
 
 .tab-btn-mods:hover {
-    background: #1b1455;
-    box-shadow: 0 0 5px 1 #1b1455;
-    border: 4px solid #1b1455;
+    background: #3436a3;
+    box-shadow: 0 0 5px 1 #3436a3;
+    border: 4px solid #3436a3;
 }
 
 .tab-btn-css-settings {
@@ -91,18 +91,18 @@ body {
 }
 
 .tab-btn-css:hover {
-    background: #1b1455;
-    box-shadow: 0 0 5px 1 #1b1455;
-    border: 4px solid #1b1455;
+    background: #3436a3;
+    box-shadow: 0 0 5px 1 #3436a3;
+    border: 4px solid #3436a3;
 }
 
 .active-tab-btn {
-    background: #0f1161;
+    background: #1f2081;
     box-shadow: 0 0 5px #d6d4d4;
 }
 
 .active-tab-btn:hover {
-    background: #0f1161;
+    background: #1f2081;
     border: 4px solid #ffffff;
     box-shadow: 0 0 5px #ffffff;
 }
@@ -401,7 +401,7 @@ body {
     padding: 8px 16px;
     margin: 0 40px;
     margin-top: 2%;
-    color: #0f1161;
+    color: #1f2081;
     background-color: #1f1f1f;
     user-select: text;
     transition: color .2s, background-color .2s;
@@ -570,7 +570,7 @@ body {
 }
 
 .checkbox-settings:checked+label {
-    background-color: #0f1161;
+    background-color: #1f2081;
 }
 
 .checkround {
