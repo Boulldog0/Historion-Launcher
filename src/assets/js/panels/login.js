@@ -5,6 +5,7 @@
 
 'use strict';
 
+import { refresh } from 'minecraft-java-core/build/Authenticator/Mojang.js';
 import { database, changePanel, addAccount, accountSelect } from '../utils.js';
 const { AZauth } = require('minecraft-java-core');
 const { ipcRenderer } = require('electron');
@@ -375,7 +376,7 @@ class Login {
 
                 addAccount(account)
                 accountSelect(account.uuid)
-                changePanel("home");
+                changePanel("settings");
 
                 cancelMojangBtn.disabled = false;
                 cancelMojangBtn.click();
