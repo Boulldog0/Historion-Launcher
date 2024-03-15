@@ -16,7 +16,6 @@ import { config, logger, changePanel, database, addAccount, accountSelect } from
 import Login from './panels/login.js';
 import Home from './panels/home.js';
 import Settings from './panels/settings.js';
-import Optmods from './panels/optmods.js';
 
 class Launcher {
     async init() {

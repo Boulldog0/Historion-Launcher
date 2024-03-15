@@ -1,36 +1,47 @@
 <link rel='stylesheet' href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 <div class="settings-content">
+    <div class="bottom-bar-home">
+        <div class="player-head">
+            <div class="green-point"></div>
+        </div>
+        <div class="little-bar-home">
+            <button class="home-btn icon-home"></button>
+        </div>
+        <button class="settings-btn icon-settings"></button>
+      </div>
+    </div>
     <div class="tabs-settings-btn">
-        <button style="margin-top: 40px;" class="icon-users tab-btn-css tab-btn active-tab-btn default-tab-btn" > Comptes Connectés</button>
-        <button class="icon-terminal tab-btn-css tab-btn"> Paramètres RAM</button>
+        <button style="margin-top: 40px;" class="icon-users tab-btn-css tab-btn active-tab-btn default-tab-btn" > Comptes</button>
+        <button class="icon-terminal tab-btn-css tab-btn"> RAM Alloué</button>
         <button class="icon-wrench tab-btn-css tab-btn"> Launcher</button>
+        <button class="icon-terminal tab-btn-css tab-btn"> Console</button>
         <br>
         <br>
-        <button class="tab-btn-css-settings save-tabs-btn"> Retourner au menu principal</button>
-        <button id="github" class="icon-github tab-btn-git"> GitHub du launcher</button>
+        <button class="tab-btn-css-settings save-tabs-btn"> Sauvegarder</button>
+        <button id="github" class="icon-github tab-btn-git"> GitHub</button>
     </div>
 
     <div class="tabs-settings-content active-tab-content">
         <div class="center-align">
-            <button class="add-account">Ajouter un compte Historion</button>
+            <button class="add-account">Ajouter un compte</button>
             <div class="accounts"></div>
         </div>
     </div>
 
     <div class="tabs-settings-content">
         <div class="settings-content-scroll">
-            <div class="title-settings">Paramètre de votre RAM.</div>
-            <div class="java-settings">
-              <div class="advert">
-                <div class="information">❗Important : Pensez a augmenter votre RAM alloué si besoin, la ram manquante étant la cause principale du lag in-game. Historion est un jeu gourmand en ressources, il vous faut donc allouer de la ram ^^</div>
+            <div class="title-settings">Paramètres de votre RAM.</div>
+            <div class="avert">
+                <div class="information">❗ Important : Allouer beaucoup de RAM a votre jeu est essentiel. En effet, celui si ne pourra pas fonctionner correctement avec moins de 3 GO de ram alloué.</div>
               </div>
+            <div class="java-settings">
                 <div class="information">
                     Définition de la RAM alloué : La ram alloué est la ram donné à votre jeu lors de son lancement. Une quantité plus important augmenteras les performances de votre jeu.<br> A noter qu'il faut éviter de mettre une trop grande quantité de RAM, sinon cela peut provoquer des pertes de performances sur vos
                     autres applications.
                     <br><br>
                     <b>- RAM Maximale :</b> Indique la quantité totale de RAM allouée à votre jeu. Il est recommandé de ne pas dépasser 50% de la quantité totale de RAM présente sur votre PC afin qu'il puisse fonctionner correctement. Si votre ordinateur
                     a plus de 8Go de RAM, nous vous recommandons d'allouer 3Go. Si votre ordinateur a 4Go ou moins, n'allouez pas plus de 2Go.<br><br>
-                    <b>- RAM Minimale :</b> Indique la quantité minimale de RAM allouée au démarrage de votre jeu. Il est recommandé de ne pas mettre plus de 2Go pour cette valeur. La valeur typique est de 1Go.<br><br>
+                    <b>- RAM Minimale :</b> Indique la quantité minimale de RAM allouée au démarrage de votre jeu. Il est recommandé de ne pas mettre plus de 3Go pour cette valeur. La valeur typique est de 1Go.<br><br>
                 </div>
                 <div class="ram-info">
                     <div class="memory-slider" min="0.5" max="8" step="0.5">
@@ -74,5 +85,6 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 

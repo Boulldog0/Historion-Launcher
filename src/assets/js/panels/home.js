@@ -114,28 +114,6 @@ class Home {
         let account = (await this.database.get(uuid.selected, 'accounts')).value;
         
         let blockRole = document.createElement("div");
-        if (this.config.role === true && account.user_info.role) {
-
-        blockRole.innerHTML = `
-        <div>Grade: ${account.user_info.role.name}</div>
-        `
-        document.querySelector('.player-role').appendChild(blockRole);
-        }
-        if(!account.user_info.role) {
-            document.querySelector(".player-role").style.display = "none";
-        }
-
-
-        let blockMonnaie = document.createElement("div");
-        if (this.config.money === true) {
-        blockMonnaie.innerHTML = `
-        <div>${account.user_info.monnaie} Tokens</div>
-        `
-        document.querySelector('.player-monnaie').appendChild(blockMonnaie);
-        }
-        if(account.user_info.monnaie === "undefined") {
-            document.querySelector(".player-monnaie").style.display = "none";
-        }
         if (this.config.whitelist_activate === true) {
         if (!this.config.whitelist.includes(account.name)) {
             document.querySelector(".play-btn").style.backgroundColor = "#AB9E9E"; // Couleur de fond grise
@@ -307,7 +285,11 @@ class Home {
     initBtn() {
         let settings_url = pkg.user ? `${pkg.settings}/${pkg.user}` : pkg.settings
         document.querySelector('.settings-btn').addEventListener('click', () => {
-            changePanel('settings');
+            changePanel("settings");
+        });
+
+        document.querySelector('.home-btn').addEventListener('click', () => {
+            changePanel("home");
         });
 
         document.getElementById("discord").addEventListener("click", function() {

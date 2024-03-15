@@ -96,6 +96,7 @@
     font-family: "Icons";
     content: "\e909";
 }
+
 .icon-play:before {
     font-family: "Iconn";
     content: "\ea15";
@@ -109,6 +110,11 @@
   .icon-coin-dollar:before {
     font-family: "Iconn";
     content: "\e93b";
+  }
+
+  .icon-home:before {
+    font-family: "Iconn";
+    content: "\e902";
   }
 
   .icon-bubbles2:before {
@@ -134,6 +140,11 @@
   .icon-rocket:before {
     font-family: "Iconn";
     content: "\e9a5";
+  }
+
+  .icon-terminal:before {
+    font-family: "Iconn";
+    content: "\ea81";
   }
 
   .icon-upload3:before {
