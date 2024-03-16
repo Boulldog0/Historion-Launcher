@@ -16,7 +16,6 @@ class Settings {
         this.config = config;
         this.database = await new database().init();
         this.initSettingsDefault();
-        this.bkgrole();
         this.initTab();
         this.initAccount();
         this.initRam();
@@ -86,6 +85,39 @@ class Settings {
         });
     }
 
+    async initJavaPath() {
+        let javaDatabase = (await this.database.get('1234', 'java-path'))?.value?.path;
+        let javaPath = javaDatabase ? javaDatabase : 'Utiliser la version de java livre avec le launcher';
+        document.querySelector(".info-path").textContent = `${dataDirectory.replace(/\\/g, "/")}/${process.platform == 'darwin' ? this.config.dataDirectory : `.${this.config.dataDirectory}`}/runtime`;
+
+        let path = document.querySelector(".path");
+        path.value = javaPath;
+        let file = document.querySelector(".path-file");
+
+        document.querySelector(".path-button").addEventListener("click", async() => {
+            file.value = '';
+            file.click();
+            await new Promise((resolve) => {
+                let interval;
+                interval = setInterval(() => {
+                    if (file.value != '') resolve(clearInterval(interval));
+                }, 100);
+            });
+
+            if (file.value.replace(".exe", '').endsWith("java") || file.value.replace(".exe", '').endsWith("javaw")) {
+                this.database.update({ uuid: "1234", path: file.value }, 'java-path');
+                path.value = file.value.replace(/\\/g, "/");
+            } else alert("Le nom du fichier doit être java ou javaw");
+
+        });
+
+        document.querySelector(".path-button-reset").addEventListener("click", () => {
+            path.value = 'Utiliser la version de java livre avec le launcher';
+            file.value = '';
+            this.database.update({ uuid: "1234", path: false }, 'java-path');
+        });
+    }
+
     async initJavaArgs() {
         let javaArgsDatabase = (await this.database.get('1234', 'java-args'))?.value?.args;
         let argsInput = document.querySelector(".args-settings");
@@ -108,7 +140,7 @@ class Settings {
             }
         });
     }
-      
+
     async initResolution() {
         let resolutionDatabase = (await this.database.get('1234', 'screen'))?.value?.screen;
         let resolution = resolutionDatabase ? resolutionDatabase : { width: "1280", height: "720" };
@@ -181,37 +213,6 @@ class Settings {
             this.database.update(settingsLauncher, 'launcher');
         })
     }
-
-    async bkgrole () {
-        let uuid = (await this.database.get('1234', 'accounts-selected')).value;
-        let account = (await this.database.get(uuid.selected, 'accounts')).value;
-        
-        if (account.user_info.role.name === this.config.role_data.role1.name) {
-            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role1.background}) black no-repeat center center scroll`;
-        }
-        if (account.user_info.role.name === this.config.role_data.role2.name) {
-            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role2.background}) black no-repeat center center scroll`;
-        }
-        if (account.user_info.role.name === this.config.role_data.role3.name) {
-            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role3.background}) black no-repeat center center scroll`;
-        }
-        if (account.user_info.role.name === this.config.role_data.role4.name) {
-            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role4.background}) black no-repeat center center scroll`;
-        }
-        if (account.user_info.role.name === this.config.role_data.role5.name) {
-            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role5.background}) black no-repeat center center scroll`;
-        }
-        if (account.user_info.role.name === this.config.role_data.role6.name) {
-            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role6.background}) black no-repeat center center scroll`;
-        }
-        if (account.user_info.role.name === this.config.role_data.role7.name) {
-            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role7.background}) black no-repeat center center scroll`;
-        }
-        if (account.user_info.role.name === this.config.role_data.role8.name) {
-            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role8.background}) black no-repeat center center scroll`;
-        }
-        
-    }
     
     initTab() {
         let TabBtn = document.querySelectorAll('.tab-btn');
@@ -221,6 +222,7 @@ class Settings {
             TabBtn[i].addEventListener('click', () => {
                 if (TabBtn[i].classList.contains('save-tabs-btn')) return
                 for (let j = 0; j < TabBtn.length; j++) {
+                    TabContent[j].classList.remove('active-tab-content');
                     TabBtn[j].classList.remove('active-tab-btn');
                 }
                 TabContent[i].classList.add('active-tab-content');
@@ -231,17 +233,18 @@ class Settings {
         document.querySelector('.save-tabs-btn').addEventListener('click', () => {
             document.querySelector('.default-tab-btn').click();
             changePanel("home");
-        })
+        });
 
-        document.querySelector('.home-btn').addEventListener('click', () => {
+        document.querySelector('.home-btn-2').addEventListener('click', () => {
             document.querySelector('.default-tab-btn').click();
             changePanel("home");
-        })
+        });
     
         document.getElementById("github").addEventListener("click", function() {
             window.open("https://github.com/Boulldog0/Historion-Launcher", "_blank");
         });
-    } 
+    }
+    
 
     async initSettingsDefault() {
         if (!(await this.database.getAll('accounts-selected')).length) {

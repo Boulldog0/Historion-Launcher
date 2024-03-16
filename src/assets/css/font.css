@@ -166,3 +166,6 @@
     font-family: "Icons";
     content: "\e90a";
 }
+
+.icon-memory:before { font-family: "Icons"; content: "\e907"; }
+.icon-expand:before { font-family: "Icons"; content: "\e903"; }
