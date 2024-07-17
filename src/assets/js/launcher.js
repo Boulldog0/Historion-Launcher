@@ -7,20 +7,19 @@
 
 // libs 
 const fs = require('fs');
-const { Microsoft, Mojang, AZauth } = require('minecraft-java-core');
+const { AZauth } = require('minecraft-java-core-azbetter');
 const pkg = require('../package.json');
 const { ipcRenderer } = require('electron');
 const DiscordRPC = require('discord-rpc');
 
-import { config, changePanel, database, addAccount, accountSelect } from './utils.js';
+import { config, logger, changePanel, database, addAccount, accountSelect } from './utils.js';
 import Login from './panels/login.js';
 import Home from './panels/home.js';
 import Settings from './panels/settings.js';
-import Logger from './Logger.js';
 
 class Launcher {
     async init() {
-        this.initWindow();
+        this.initLog();
         console.log("Initializing Launcher...");
         if (process.platform == "win32") this.initFrame();
         this.config = await config.GetConfig().then(res => res);
@@ -30,185 +29,37 @@ class Launcher {
         this.getaccounts();
         this.initDiscordRPC();
     }
-
-    initWindow(){
-        window.logger = {
-          launcher: new Logger("Launcher", "#FF7F18"),
-          minecraft: new Logger("Minecraft", "#43B581")
-        }
-    
-        this.initLogs();
-    
-        window.console = window.logger.launcher;
-    
-        window.onerror = (message, source, lineno, colno, error) => {
-          console.error(error);
-          source = source.replace(`${window.location.origin}/app/`, "");
-          let stack = error.stack.replace(new RegExp(`${window.location.origin}/app/`.replace(/\//g, "\\/"), "g"), "").replace(/\n/g, "<br>").replace(/\x20/g, "&nbsp;");
-          popup.showPopup("Une erreur est survenue", `
-            <b>Erreur:</b> ${error.message}<br>
-            <b>Fichier:</b> ${source}:${lineno}:${colno}<br>
-            <b>Stacktrace:</b> ${stack}`, "warning",
-            {
-              value: "Relancer",
-              func: () => {
-                document.body.classList.add("hide");
-                win.reload()
-              }
-            }
-          );
-          document.body.classList.remove("hide");
-          return true;
-        };
-    
-        window.onclose = () => {
-          localStorage.removeItem("distribution");
-        }
-      }
     
 
-      initLogs(){
-        let logs = document.querySelector(".log-bg");
-    
-        let block = false;
+    initLog() {
         document.addEventListener("keydown", (e) => {
-          if ((e.ctrlKey && e.shiftKey && e.keyCode == 73 || event.keyCode == 123) && !block) {
-            logs.classList.toggle("show");
-            block = true;
-          }
-        });
-    
-        document.addEventListener("keyup", (e) => {
-          if (e.ctrlKey && e.shiftKey && e.keyCode == 73 || event.keyCode == 123) block = false;
-        });
-    
-        let close = document.querySelector(".log-close");
-    
-        close.addEventListener("click", () => {
-          logs.classList.toggle("show");
-        })
-    
-        /* launcher logs */
-    
-        let launcher = document.querySelector("#launcher.logger");
-    
-        launcher.querySelector(".header").addEventListener("click", () => {
-          launcher.classList.toggle("open");
-        });
-    
-        let lcontent = launcher.querySelector(".content");
-    
-        logger.launcher.on("info", (...args) => {
-          addLog(lcontent, "info", args);
-        });
-    
-        logger.launcher.on("warn", (...args) => {
-          addLog(lcontent, "warn", args);
-        });
-    
-        logger.launcher.on("debug", (...args) => {
-          addLog(lcontent, "debug", args);
-        });
-    
-        logger.launcher.on("error", (...args) => {
-          addLog(lcontent, "error", args);
-        });
-    
-        /* minecraft logs */
-    
-        let minecraft = document.querySelector("#minecraft.logger");
-    
-        minecraft.querySelector(".header").addEventListener("click", () => {
-          minecraft.classList.toggle("open");
-        });
-    
-        let mcontent = minecraft.querySelector(".content");
-    
-        logger.minecraft.on("info", (...args) => {
-          addLog(mcontent, "info", args);
-        });
-    
-        logger.minecraft.on("warn", (...args) => {
-          addLog(mcontent, "warn", args);
-        });
-    
-        logger.minecraft.on("debug", (...args) => {
-          addLog(mcontent, "debug", args);
-        });
-    
-        logger.minecraft.on("error", (...args) => {
-          addLog(mcontent, "error", args);
-        });
-    
-        /* add log */
-    
-        function addLog(content, type, args){
-          let final = [];
-          for(let arg of args){
-            if(typeof arg == "string"){
-              final.push(arg);
-            } else if(arg instanceof Error) {
-              let stack = arg.stack.replace(new RegExp(`${window.location.origin}/app/`.replace(/\//g, "\\/"), "g"), "")
-              final.push(stack);
-            } else if(typeof arg == "object"){
-              final.push(JSON.stringify(arg));
-            } else {
-              final.push(arg);
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 73 || e.keyCode == 123) {
+                ipcRenderer.send("main-window-dev-tools");
             }
-          }
-          let span = document.createElement("span");
-          span.classList.add(type);
-          span.innerHTML = `${final.join(" ")}<br>`.replace(/\x20/g, "&nbsp;").replace(/\n/g, "<br>");
-    
-          content.appendChild(span);
-        }
-      }
-    
+        })
+        new logger('Launcher', '#7289da')
+    }
     
     initDiscordRPC() {
-
-        if (process.env.NODE_ENV === 'dev') {
-            const rpc = new DiscordRPC.Client({ transport: 'ipc' });
-            rpc.on('ready', () => {
-                const presence = {
-                    details: 'Dev FrontierLauncher',
-                    state: 'Check Github',
-                    largeImageKey: 'frontier',
-                    largeImageText: 'FrontierLauncher',
-                    smallImageKey: 'small',
-                    smallImageText: this.config.rpc_small_text,
-                    buttons: [
-                        { label: this.config.rpc_button1, url: this.config.rpc_button1_url },
-                        { label: this.config.rpc_button2, url: this.config.rpc_button2_url }
-                    ]
-                };
-                rpc.setActivity(presence);
-            });
-            rpc.login({ clientId: this.config.rpc_id }).catch(console.error);
-          } else {
-            if (this.config.rpc_activation === true) {
-                const rpc = new DiscordRPC.Client({ transport: 'ipc' });
-                rpc.on('ready', () => {
-                    const presence = {
-                        details: this.config.rpc_details,
-                        state: this.config.rpc_state,
-                        largeImageKey: 'frontier',
-                        largeImageText: this.config.rpc_large_text,
-                        smallImageKey: 'small',
-                        smallImageText: this.config.rpc_small_text,
-                        buttons: [
-                            { label: this.config.rpc_button1, url: this.config.rpc_button1_url },
-                            { label: this.config.rpc_button2, url: this.config.rpc_button2_url }
-                        ]
-                    };
-                    rpc.setActivity(presence);
-                });
-                rpc.login({ clientId: this.config.rpc_id }).catch(console.error);
-                }  
-          }
-
-          console.log(process.env.NODE_ENV);
-
+        if (this.config.rpc_activation === true) {
+        const rpc = new DiscordRPC.Client({ transport: 'ipc' });
+        rpc.on('ready', () => {
+            const presence = {
+                details: this.config.rpc_details,
+                state: this.config.rpc_state,
+                largeImageKey: 'large',
+                largeImageText: this.config.rpc_large_text,
+                smallImageKey: 'small',
+                smallImageText: this.config.rpc_small_text,
+                buttons: [
+                    { label: this.config.rpc_button1, url: this.config.rpc_button1_url },
+                    { label: this.config.rpc_button2, url: this.config.rpc_button2_url }
+                ]
+            };
+            rpc.setActivity(presence);
+        });
+        rpc.login({ clientId: this.config.rpc_id }).catch(console.error);
+    }
 }
 
 
@@ -262,7 +113,7 @@ class Launcher {
                 if (account.meta.type === 'AZauth') {
                     let refresh = await AZAuth.verify(account);
                     console.log(refresh);
-                    console.log(`Initializing Azuriom account ${account.name}...`);
+                    console.log(`Initializing Mojang account ${account.name}...`);
                     let refresh_accounts;
 
                     if (refresh.error) {
@@ -310,9 +161,101 @@ class Launcher {
                 return
             }
             changePanel("home");
+            
         }
         document.querySelector(".preload-content").style.display = "none";
     }
+    async refreshData() {
+
+        document.querySelector('.player-role').innerHTML = '';
+        
+        await this.bkgrole();
+    }
     
+    async bkgrole() {
+        const uuid = (await this.database.get('1234', 'accounts-selected')).value;
+        const account = (await this.database.get(uuid.selected, 'accounts')).value;
+
+        if (this.config.role === true && account.user_info.role) {
+            const blockRole = document.createElement("div");
+            blockRole.innerHTML = `<div>Grade: ${account.user_info.role.name}</div>`;
+            document.querySelector('.player-role').appendChild(blockRole);
+        } else {
+            document.querySelector(".player-role").style.display = "none";
+        }
+
+        if (this.config.money === true) {
+            const blockMonnaie = document.createElement("div");
+            blockMonnaie.innerHTML = `<div>${account.user_info.monnaie} pts</div>`;
+            document.querySelector('.player-monnaie').appendChild(blockMonnaie);
+        } else {
+            document.querySelector(".player-monnaie").style.display = "none";
+        }
+
+        if (this.config.whitelist_activate === true && !this.config.whitelist.includes(account.name)) {
+            document.querySelector(".icon-play").style.backgroundColor = "#696969";
+            document.querySelector(".icon-play").style.pointerEvents = "none";
+            document.querySelector(".icon-play").style.boxShadow = "none";
+            document.querySelector(".play-btn").textContent = "Indisponible";
+        }
+        const urlPattern = /^(http:\/\/|https:\/\/)/;
+        if (account.user_info.role.name === this.config.role_data.role1.name) {
+            if (urlPattern.test(this.config.role_data.role1.background) === true) {
+            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role1.background}) black no-repeat center center scroll`;
+            } else {
+                document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("../src/assets/images/background/light.jpg") black no-repeat center center scroll`;
+            }
+        }
+        if (account.user_info.role.name === this.config.role_data.role2.name) {
+            if (urlPattern.test(this.config.role_data.role2.background) === true) {
+            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role2.background}) black no-repeat center center scroll`;
+            }else {
+                document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("../src/assets/images/background/light.jpg") black no-repeat center center scroll`;
+            }
+        }
+        if (account.user_info.role.name === this.config.role_data.role3.name) {
+            if (urlPattern.test(this.config.role_data.role3.background) === true) {
+            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role3.background}) black no-repeat center center scroll`;
+            } else {
+                document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("../src/assets/images/background/light.jpg") black no-repeat center center scroll`;
+            }
+        }
+        if (account.user_info.role.name === this.config.role_data.role4.name) {
+            if (urlPattern.test(this.config.role_data.role4.background) === true) {
+            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role4.background}) black no-repeat center center scroll`;
+            } else {
+                document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("../src/assets/images/background/light.jpg") black no-repeat center center scroll`;
+            }
+        }
+        if (account.user_info.role.name === this.config.role_data.role5.name) {
+            if (urlPattern.test(this.config.role_data.role5.background) === true) {
+            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role5.background}) black no-repeat center center scroll`;
+            } else {
+                document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("../src/assets/images/background/light.jpg") black no-repeat center center scroll`;
+            }
+        }
+        if (account.user_info.role.name === this.config.role_data.role6.name) {
+            if (urlPattern.test(this.config.role_data.role6.background) === true) {
+            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role6.background}) black no-repeat center center scroll`;
+            } else {
+                document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("../src/assets/images/background/light.jpg") black no-repeat center center scroll`;
+            }
+        }
+        if (account.user_info.role.name === this.config.role_data.role7.name) {
+            if (urlPattern.test(this.config.role_data.role7.background) === true) {
+            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role7.background}) black no-repeat center center scroll`;
+            } else {
+                document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("../src/assets/images/background/light.jpg") black no-repeat center center scroll`;
+            }
+        }
+        if (account.user_info.role.name === this.config.role_data.role8.name) {
+            if (urlPattern.test(this.config.role_data.role1.background) === true) {
+            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role8.background}) black no-repeat center center scroll`;
+            } else {
+                document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("../src/assets/images/background/light.jpg") black no-repeat center center scroll`;
+            }
+        } 
+    }
 }
+
 new Launcher().init();

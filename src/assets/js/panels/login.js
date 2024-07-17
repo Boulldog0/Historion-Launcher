@@ -6,10 +6,11 @@
 'use strict';
 
 import { database, changePanel, addAccount, accountSelect } from '../utils.js';
-const { AZauth } = require('minecraft-java-core');
+const fetch = require('node-fetch');
+const { AZauth } = require('minecraft-java-core-azbetter');
 const { ipcRenderer } = require('electron');
 const pkg = require('../package.json');
-
+const url = "https://historion.wstr.fr";
 
 class Login {
     
@@ -22,8 +23,6 @@ class Login {
     }
 
     getOnline() {
-        // console.log(`Initializing microsoft Panel...`)
-        // console.log(`Initializing mojang Panel...`)
         console.log(`Initializing Az Panel...`)
         this.loginMicrosoft();
         this.loginMojang();
@@ -131,6 +130,11 @@ class Login {
         this.passwordreset.innerHTML="Mot de passe oublié ?"
         this.passwordreset.setAttribute ("href", passwordreseturl)
 
+        let emailverifyurl = `${azauth}/profile`
+        this.emailverifyurl = document.querySelector(".email_invalid");
+        this.emailverifyurl.innerHTML="Email non vérifiée ?"
+        this.emailverifyurl.setAttribute ("href", emailverifyurl)
+
         mojangBtn.addEventListener("click", () => {
             document.querySelector(".login-card").style.display = "none";
             document.querySelector(".login-card-mojang").style.display = "block";
@@ -157,7 +161,8 @@ class Login {
 
         loginBtn2f.addEventListener("click", async() => {
          if (a2finput.value == "") {
-                infoLogin2f.innerHTML = "Entrez votre code A2F"
+                infoLogin.style.display = "block";
+                infoLogin2f.innerHTML = "⚠️ Erreur ⚠️ :<br>Veuillez entrer votre code A2F"
                 return
             }
             let azAuth = new AZauth(azauth);
@@ -165,7 +170,8 @@ class Login {
             await azAuth.login(mailInput.value, passwordInput.value, a2finput.value).then(async account_connect => {
                 console.log(account_connect);
                 if (account_connect.error) {
-                    infoLogin2f.innerHTML = 'Votre code A2F est invalide'
+                    infoLogin.style.display = "block";
+                    infoLogin2f.innerHTML = '⚠️ Erreur ⚠️ :<br>Votre code A2F est invalide'
                     return
                 }
                 let account = {
@@ -203,11 +209,7 @@ class Login {
                 infoLogin.innerHTML = "&nbsp;";
             })
 
-            
-
         })
-
-
 
         loginBtn.addEventListener("click", async() => {
             cancelMojangBtn.disabled = true;
@@ -219,7 +221,8 @@ class Login {
 
             if (mailInput.value == "") {
                 console.log(mailInput.value);
-                infoLogin.innerHTML = "Entrez votre pseudo"
+                infoLogin.style.display = "block";
+                infoLogin.innerHTML = "⚠️ Erreur ⚠️ :<br>Veuillez entrer votre pseudo"
                 cancelMojangBtn.disabled = false;
                 loginBtn.disabled = false;
                 mailInput.disabled = false;
@@ -228,7 +231,8 @@ class Login {
             }
 
             if (passwordInput.value == "") {
-                infoLogin.innerHTML = "Entrez votre mot de passe"
+                infoLogin.style.display = "block";
+                infoLogin.innerHTML = "⚠️ Erreur ⚠️ :<br>Veuillez entrer votre mot de passe"
                 cancelMojangBtn.disabled = false;
                 loginBtn.disabled = false;
                 mailInput.disabled = false;
@@ -247,13 +251,54 @@ class Login {
                     return
 
                 }
+
+                if (mailInput.value == "") {
+                    infoLogin.style.display = "block";
+                    infoLogin.innerHTML = "⚠️ Erreur ⚠️ :<br>Veuillez entrer votre adresse email / Nom d'utilisateur"
+                    cancelMojangBtn.disabled = false;
+                    loginBtn.disabled = false;
+                    mailInput.disabled = false;
+                    passwordInput.disabled = false;
+                    return
+                }
+    
+                if (mailInput.value.length < 3) {
+                    infoLogin.style.display = "block";
+                    infoLogin.innerHTML = "⚠️ Erreur ⚠️ :<br>Votre nom d'utilisateur doit avoir au moins 3 caractères"
+                    cancelMojangBtn.disabled = false;
+                    loginBtn.disabled = false;
+                    mailInput.disabled = false;
+                    passwordInput.disabled = false;
+                    return
+                }
+                
+                if (account_connect.reason == 'invalid_credentials') {
+                    cancelMojangBtn.disabled = false;
+                    loginBtn.disabled = false;
+                    mailInput.disabled = false;
+                    passwordInput.disabled = false;
+                    infoLogin.style.display = "block";
+                    infoLogin.innerHTML = '⚠️ Erreur ⚠️ :<br>Les identifiants fournis sont invalides !'
+                    return
+                }
+                
+                if (!account_connect.user_info.verified) {
+                    cancelMojangBtn.disabled = false;
+                    loginBtn.disabled = false;
+                    mailInput.disabled = false;
+                    passwordInput.disabled = false;
+                    infoLogin.style.display = "block";
+                    infoLogin.innerHTML = '⚠️ Erreur ⚠️ :<br>Votre adresse email n\'est pas vérifiée. <br>Merci de la vérifier avant de pouvoir vous connecter.'
+                    return
+                }
                
                 if (account_connect.reason === 'user_banned') {
                     cancelMojangBtn.disabled = false;
                     loginBtn.disabled = false;
                     mailInput.disabled = false;
                     passwordInput.disabled = false;
-                    infoLogin.innerHTML = 'Votre compte est banni. <br>Merci de vous rendre sur notre discord pour toute contestation.'
+                    infoLogin.style.display = "block";
+                    infoLogin.innerHTML = `⚠️ Erreur ⚠️ :<br>Votre compte est banni. <br>Merci de vous rendre sur notre discord pour toute contestation.`
                     return
                 }
                 
@@ -261,9 +306,7 @@ class Login {
                     document.querySelector(".login-card").style.display = "block";
                     document.querySelector(".login-card-mojang").style.display = "none";
                     document.querySelector('.a2f-card').style.display = "none";
-                })
-
-             
+                })    
 
                 let account = {
                     access_token: account_connect.access_token,
@@ -282,14 +325,13 @@ class Login {
                     
                     
                 }
-                
 
                 this.database.add(account, 'accounts')
                 this.database.update({ uuid: "1234", selected: account.uuid }, 'accounts-selected');
 
-
                 addAccount(account)
                 accountSelect(account.uuid)
+                changePanel("settings");
                 changePanel("settings");
 
                 cancelMojangBtn.disabled = false;
@@ -306,7 +348,8 @@ class Login {
                 loginBtn.disabled = false;
                 mailInput.disabled = false;
                 passwordInput.disabled = false;
-                infoLogin.innerHTML = 'Adresse E-mail/Pseudo ou mot de passe invalide'
+                infoLogin.style.display = "block";
+                infoLogin.innerHTML = '⚠️ Erreur ⚠️ :<br>Adresse E-mail/Pseudo ou mot de passe invalide'
             })
         })
     }
@@ -336,11 +379,11 @@ class Login {
             loginBtn.disabled = true;
             mailInput.disabled = true;
             passwordInput.disabled = true;
-            infoLogin.innerHTML = "Connexion en cours...";
-
+            loginBtn.innerHTML = "Connexion en cours...";
 
             if (mailInput.value == "") {
-                infoLogin.innerHTML = "Entrez votre adresse email / Nom d'utilisateur"
+                infoLogin.style.display = "block";
+                infoLogin.innerHTML = "⚠️ Erreur ⚠️ :<br>Entrez votre adresse email / Nom d'utilisateur"
                 cancelMojangBtn.disabled = false;
                 loginBtn.disabled = false;
                 mailInput.disabled = false;
@@ -349,7 +392,8 @@ class Login {
             }
 
             if (mailInput.value.length < 3) {
-                infoLogin.innerHTML = "Votre nom d'utilisateur doit avoir au moins 3 caractères"
+                infoLogin.style.display = "block";
+                infoLogin.innerHTML = "⚠️ Erreur ⚠️ :<br>Votre nom d'utilisateur doit avoir au moins 3 caractères"
                 cancelMojangBtn.disabled = false;
                 loginBtn.disabled = false;
                 mailInput.disabled = false;
@@ -366,8 +410,14 @@ class Login {
                     user_properties: account_connect.user_properties,
                     meta: {
                         type: account_connect.meta.type,
-                        offline: account_connect.meta.offline
+                        offline: true
                     },
+                    user_info: {
+                        role: account_connect.user_info.role,
+                        monnaie: account_connect.user_info.money,
+                    },
+                    
+                    
                 }
 
                 this.database.add(account, 'accounts')
@@ -375,6 +425,7 @@ class Login {
 
                 addAccount(account)
                 accountSelect(account.uuid)
+                changePanel("settings");
                 changePanel("settings");
 
                 cancelMojangBtn.disabled = false;
@@ -391,11 +442,11 @@ class Login {
                 loginBtn.disabled = false;
                 mailInput.disabled = false;
                 passwordInput.disabled = false;
-                infoLogin.innerHTML = 'Adresse E-mail ou mot de passe invalide.'
+                infoLogin.style.display = "block";
+                infoLogin.innerHTML = '⚠️ Erreur ⚠️ :<br>Une erreur est survenue lors de la tentative de connexion.<br>Merci de reesayer ulterieurement, et contactez le staff si l\'erreur periste.'
             })
         })
     }
-    
 }
 
 export default Login;

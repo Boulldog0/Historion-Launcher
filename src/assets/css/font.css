@@ -132,6 +132,26 @@
     content: "\ea81";
   }
 
+  .icon-console:before {
+    font-family: "Iconn";
+    content: "\e926";
+  }
+
+  .icon-skin:before {
+    font-family: "Iconn";
+    content: "\e971";
+  }
+
+  .icon-mods:before {
+    font-family: "Iconn";
+    content: "\e931";
+  }
+
+  .icon-ytb:before {
+    font-family: "Iconn";
+    content: "\e912";
+  }
+
   .icon-wrench:before {
     font-family: "Iconn";
     content: "\e991";

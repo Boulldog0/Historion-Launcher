@@ -1,11 +1,11 @@
 {
-    "name": "historion",
-    "preductname": "Historion Launcher",
-    "version": "3.0.0",
-    "description": "Launcher de Historion PvP Faction moddé",
+    "name": "luminaria",
+    "preductname": "Luminaria Launcher",
+    "version": "1.0.0",
+    "description": "Launcher de Luminaria",
     "main": "src/app.js",
     "author": "Boulldogo/Riptiaz",
-    "settings": "https://launcher.historion-mc.fr/panel",
+    "settings": "https://launcher.historion.wstr.fr/panel",
     "engines": {
         "node": "16.x.x"
     },
@@ -19,11 +19,15 @@
         "ext": "js,html,css"
     },
     "dependencies": {
+        "axios": "^1.7.2",
+        "bootstrap-icons": "^1.11.3",
+        "crypto": "^1.0.1",
         "discord-rpc": "^4.0.1",
         "electron-updater": "^5.0.1",
         "https": "^1.0.0",
-        "minecraft-java-core": "^3.6.2",
+        "minecraft-java-core-azbetter": "^3.11.3",
         "node-fetch": "^2.6.7",
+        "os": "^0.1.2",
         "xml-js": "^1.6.11"
     },
     "devDependencies": {
@@ -34,6 +38,6 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Boulldog0/Historion-Launcher.git"
+        "url": "git+https://github.com/Boulldog0/LuminariaLauncher.git"
     }
 }

@@ -4,7 +4,11 @@
     width: 8.5%;
     height: 100%;
     background: #00000080;
+    z-index: 1000;
     display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
 }
 
 .home-img {
@@ -21,24 +25,11 @@
     position: absolute;
     width: 50px;
     height: 50px;
-    bottom: 5%;
-    left: 25%;
+    margin-left: 50%;
     border: none;
     border-radius: 15px;
     transition: all 0.5s cubic-bezier(1, 0.46, 0, 1.29);
 }
-
-.little-bar-home {
-    position: absolute;
-    left: 20.5%;
-    top: 37.5%;
-    width: 60px;
-    height: 20%;
-    border-radius: 15px;
-    background: #31313180;
-    display: flex;
-}
-
 
 .green-point {
     width: 10px;
@@ -56,31 +47,95 @@
     transition: all 0.5s cubic-bezier(1, 0.46, 0, 1.29);
 }
 
-.settings-btn {
-    position: fixed;
-    width: 50px;
-    height: 50px;
-    margin-top: 308%;
-    left: 25%;
-    border: none;
+.little-bar-home {
+    position: absolute;
+    left: 10%;
+    top: 30%;
+    width: 80%;
+    height: 100px;
     border-radius: 15px;
-    transition: all 0.5s cubic-bezier(1, 0.46, 0, 1.29);
+    background: #31313180;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
 }
 
 .home-btn {
-    position: fixed;
-    width: 50px;
-    height: 50px;
-    margin-top: 1%;
-    left: 2%;
+    position: absolute;
+    top: 10%;
+    width: 80%;
+    height: 30%;
     border: none;
     border-radius: 15px;
     transition: all 0.5s cubic-bezier(1, 0.46, 0, 1.29);
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+}
+
+.play-btn-mini {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    bottom: 5%;
+    left: 25%;
+    border: none;
+    border-radius: 15px;
+    font-size: 40px;
+    transition: all 0.5s cubic-bezier(1, 0.46, 0, 1.29);
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+}
+
+.set-btn {
+    position: absolute;
+    top: 60%;
+    width: 80%;
+    height: 30%;
+    border: none;
+    border-radius: 15px;
+    transition: all 0.5s cubic-bezier(1, 0.46, 0, 1.29);
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
 }
 
 .home-btn:hover {
     border-radius: 5px;
     cursor: pointer;
+    background-color: #7a7a7a;
+}
+
+
+.play-btn-mini:hover {
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #7a7a7a;
+}
+
+.set-btn:hover {
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #7a7a7a;
+}
+
+.icon-settings:before {
+    font-size: 40px;
+}
+
+.icon-home:before {
+    font-size: 40px;
+}
+
+.home-btn:hover {
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #7a7a7a
 }
 
 .home-btn:hover {
@@ -92,6 +147,7 @@
 .settings-btn:hover {
     border-radius: 5px;
     cursor: pointer;
+    background-color: #7a7a7a
 }
 
 .settings-btn:hover {
@@ -107,32 +163,17 @@
 .icon-home:before {
     font-size: 40px;
 }
-/* Autres styles CSS... */
 
-/* Styles pour .player-role et .player-monnaie */
-.player-role {
+.player-name {
     font: normal normal bold 24px/35px Poppins;
+    font-size: 25px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    max-width: 29ch;
-    pointer-events: none;
     color: #E1E1E1;
-    margin: auto 15px;
+    text-align: center; 
 }
 
-.player-monnaie {
-    font: normal normal bold 24px/35px Poppins;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    right: 150px;
-    pointer-events: none;
-    color: #E1E1E1;
-    margin: auto 15px; /* Ajouter une marge pour l'espacement entre les éléments */
-}
-
-/* Styles pour les écrans plus larges */
 @media (min-width: 768px) {
     .player-role {
         left: 100px; /* Positionner le texte du rôle à 100px à gauche après le "skin" */
@@ -166,23 +207,29 @@
     position: absolute;
     transform: translate(-50%);
     height: 100%;
-    margin-top: 15%;
+    width: 100%;
+    top: 20%;
+    left: 25%;
     color: #F1F1F1;
     font: normal normal bold 19px/29px Poppins;
     text-align: center;
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
 }
-/*CI: #00bd7a*/
-.icon-play,
+
 .play-btn {
-    top: 10px;
-    width: 200px;
-    height: 45px;
+    position: absolute;
     border-radius: 20px;
     border: none;
+}
+
+.play-btn {
+    width: 200px;
+    height: 45px;
     background: #3436a3;
     font: normal normal bold 25px/30px Poppins;
     color: #121212;
-    margin-left: -10%;
     box-shadow: 0 0 5px #3436a3;
     cursor: pointer;
 }
@@ -191,22 +238,159 @@
     background: #1f2081;
 }
 
-.download-content {
-    position: absolute;
-    top: 50%;
-    width: 200px;
-    left: 100%;
-    transform: translate(-25%, -25%);
+.home-separator {
+    background-color: #757373;
+    height: 5%;
+    border-radius: 10px;
+    width: 230px;
+    border: 3px solid #a1a1a1;
+    box-shadow: 3px #a1a1a1;
 }
 
+.header-container {
+    position: absolute;
+    top: 5.5%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 5%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.title-home {
+    text-align: center;
+    font: normal normal bold 30px/40px Poppins;
+    font-size: 20px;
+    color: #d6d4d4;
+    margin: 2% 0;
+    cursor: pointer;
+}
+
+.title-home:hover {
+    font-size: 22px;
+    color: #a19f9f;
+}
+
+.ytb:hover {
+    transition: opacity 1s;
+    opacity: 1;
+}
+
+.video {
+    position: relative;
+    padding: 10px;
+    background-color: #1f1f1f;
+    font-family: Poppins;
+    font-size: 13px !important;
+    color: #E1E1E1;
+    text-decoration: none;
+    border-radius: 0px 0px 10px 10px;
+    transition: color .2s;
+    display: flex;
+    gap: 5%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.youtube-thumbnail {
+    position: relative;
+    width: 95%;
+    max-width: 560px; 
+    height: 240px;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.thumbnail-img {
+    width: 95%;
+    height: 240px;
+    display: block;
+}
+
+.ytb-play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.6);
+    border: none;
+    color: white;
+    font-size: 30px;
+    padding: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ytb-btn {
+    width: 200px;
+    border-radius: 10px;
+    padding: 5px;
+    background: #3436a3;
+    font: normal normal bold 15px/20px Poppins;
+    color: #ffffff;
+    box-shadow: 0 0 5px #3436a3;
+    cursor: pointer;
+    text-align: center;
+}
+
+.ytb-btn:hover {
+    background: #1f2081;
+}
+
+
+.ytb-play-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.video iframe {
+    width: 95%;
+    height: 240px;
+    border: none;
+}
+
+.credits-container {
+    display: flex;
+    flex-direction: row; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 0px;
+}
+
+.video-credits {
+    text-align: center;
+    font: normal normal bold 30px/40px Poppins;
+    font-size: 17px;
+    color: #d6d4d4;
+}
+
+.download-content {
+    width: 100%;
+    left: 12%;
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+}
+
+.time-remaining-dl,
+.speed-download-text,
 .text-download,
 .progress-bar {
+    margin-bottom: 3px;
     display: none;
 }
 
+.time-remaining-dl,
+.speed-download-text,
 .text-download {
-    font-size: 17px;
-    left: -2px;
+    margin-top: 5px;
+    font-size: 15px;
 }
 
 .progress-bar {
@@ -227,6 +411,7 @@
 .body-home {
     display: flex;
     height: 78vh;
+    left: 12%;
     margin: 3rem 2rem;
 }
 
@@ -235,8 +420,8 @@
     overflow: auto;
     width: 50%;
     margin-left: 110px;
-    top: 250px;
-    height: 60%;
+    top: 35%;
+    height: 80%;
 }
 
 .news-list::-webkit-scrollbar {
@@ -258,6 +443,7 @@
     opacity: 1;
 }
 
+.ytb-header,
 .news-header {
     position: relative;
     top: 0px;
@@ -289,6 +475,7 @@
     height: 3em;
     transition: color .2s;
 }
+
 .title-change {
     position: absolute;
     font: normal normal bold 27px/40px Poppins;
@@ -362,26 +549,31 @@
 
 .info-list {
     position: fixed;
-    right: 85px;
+    width: 30%;
+    left: 65%;
+    top: 20%;
     background: none;
+}
+
+.info-item {
+    height: 100%;
 }
 
 .server {
     position: relative;
-    width: 80%;
+    width: 100%;
     height: 75px;
-    left: 32.5%;
     background-color: #292929;
     border-radius: 10px;
     transition: opacity 1s;
     opacity: .8;
 }
 
+.ytb,
 .changelog {
     position: relative;
-    width: 80%;
+    width: 100%;
     margin-top: 10px;
-    right: -150px;
     background-color: #292929;
     border-radius: 10px;
     transition: opacity 1s;
@@ -439,11 +631,8 @@
 }
 
 .name-2 {
-    position: absolute;
     font: normal normal bold 35px/50px Poppins;
     color: #E1E1E1;
-    top: 80px;
-    left: 270px;
     transition: color .2s;
 }
 
@@ -494,10 +683,11 @@
 .logo {
     position: absolute;
     background-image: url("../../images/logo.png");
-    top: 40px;
-    left: 10%;
-    width: 128px;
-    height: 128px;
+    top: 3%;
+    width: 100px;
+    height: 100px;
+    border-radius: 15px;
+    transition: all 0.5s cubic-bezier(1, 0.46, 0, 1.29);
 }
 
 .bbWrapperButton {
@@ -594,6 +784,59 @@
     border: 2px solid #1A1A1A;
     transition: all .2s;
     background-color: #1AC707;
+}
+
+.infos-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px; 
+    margin-left: 5%;
+}
+
+.avert-home {
+    display: block;
+    padding: 6px;
+    top: 5%;
+    background: #292929;
+    border: 4px solid #a71914;
+    border-radius: 18px;
+    margin-bottom: 10px;
+    display: none;
+}
+
+.advert-banner {
+    position: absolute;
+    top: 4%; 
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    padding: 4px;
+    font: normal normal bold 16px/24px Poppins;
+    width: 75%;
+    height: 20px;
+    border-radius: 20px;
+    background-color: #7c0000;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: center; 
+}
+
+
+.infos-container-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+    margin-right: 50%;
+}
+
+.connected-txt {
+    color: #0d700a; 
+    font: normal normal bold 24px/35px Poppins;
+    font-size: 20px;
+    font-weight: bold; 
 }
 
 .online.off {

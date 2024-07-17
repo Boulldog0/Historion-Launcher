@@ -10,32 +10,9 @@
             <div id="maximize" class="button-frame icon-maximize"></div>
             <div id="close" class="button-frame icon-close"></div>
         </div>
-
-        <div class="log-bg">
-            <div class="log">
-              <div class="log-close icon-close"></div>
-              <div class="log-content">
-                <div class="titlev">Console</div>
-                <div class="logger" id="launcher">
-                  <div class="header">
-                    <div class="icon icon-memory"></div>
-                    <div class="type">Logs Launcher</div>
-                    <div class="expand icon-expand"></div>
-                  </div>
-                  <div class="content"></div>
-                </div>
-                <div class="logger" id="minecraft">
-                  <div class="header">
-                    <div class="icon icon-memory"></div>
-                    <div class="type">Logs Minecraft</div>
-                    <div class="expand icon-expand"></div>
-                  </div>
-                  <div class="content"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-
+        <div class="console"></div>
+        <div class="console-log-counter"></div>
+        <div class="console-clear-btn"></div>
         <div class="preload-content">
             <div class="preload-progress">
                 <span class="dot"></span>
@@ -45,10 +22,22 @@
                     <span></span>
                 </div>
             </div>
-            <div class="preload-title">Chargement en cours...</div>
+            <div class="preload-title">Lancement de luminaria en cours...</div>
         </div>
 
         <div class="panels"></div>
         <script src="assets/js/launcher.js" type="module"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const consoleElement = document.querySelector('.console');
+                if (consoleElement) {
+                    consoleElement.style.display = 'none';
+                }
+                const consoleBtn = document.querySelector('.console-clear-btn');
+                if (consoleBtn) {
+                    consoleBtn.style.display = 'none';
+                }
+            });
+        </script>
     </body>
 </html>

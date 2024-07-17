@@ -7,11 +7,13 @@
 
 import { logger, database, changePanel} from '../utils.js';
 
-const { Launch, Status } = require('minecraft-java-core');
-const { ipcRenderer } = require('electron');
+const { Launch, Status } = require('minecraft-java-core-azbetter');
+const { ipcRenderer, shell } = require('electron');
 const launch = new Launch();
 const pkg = require('../package.json');
-
+const axios = require('axios');
+const crypto = require('crypto');
+const websiteUrl = 'https://historion.wstr.fr';
 const dataDirectory = process.env.APPDATA || (process.platform == 'darwin' ? `${process.env.HOME}/Library/Application Support` : process.env.HOME)
 
 class Home {
@@ -21,10 +23,13 @@ class Home {
         this.config = config
         this.news = await news
         this.initNews();
+        this.initPlayBtns();
         this.initLaunch();
         this.initStatusServer();
         this.initBtn();
-        this.bkgrole();
+        this.initInfos();
+        this.initAdvert();
+        this.initVideo();
     }
 
     async initNews() {
@@ -83,24 +88,6 @@ class Home {
                         <p>Impossible de contacter le serveur des news.</br>Merci de vérifier votre configuration.</p>
                     </div>
                 </div>`
-            // news.appendChild(blockNews);
-        }
-        let title_changelog = document.createElement("div");
-        title_changelog.innerHTML = `
-        <div>${this.config.changelog_version}</div>
-        `
-        document.querySelector('.title-change').appendChild(title_changelog);
-        if(!this.config.changelog_version) {
-            document.querySelector(".title-change").style.display = "none";
-        }
-
-        let bbWrapperChange = document.createElement("div");
-        bbWrapperChange.innerHTML = `
-        <div>${this.config.changelog_new}</div>
-        `
-        document.querySelector('.bbWrapperChange').appendChild(bbWrapperChange);
-        if(!this.config.changelog_new) {
-            document.querySelector(".bbWrapperChange").style.display = "none";
         }
         let serverimg = document.querySelector('.server-img')
         serverimg.setAttribute("src", `${this.config.server_img}`)
@@ -108,161 +95,205 @@ class Home {
             serverimg.style.display = "none";
         }
     }
+
     
-    async bkgrole () {
+    async initInfos() {
         let uuid = (await this.database.get('1234', 'accounts-selected')).value;
         let account = (await this.database.get(uuid.selected, 'accounts')).value;
-        
-        let blockRole = document.createElement("div");
-        if (this.config.whitelist_activate === true) {
-        if (!this.config.whitelist.includes(account.name)) {
-            document.querySelector(".play-btn").style.backgroundColor = "#AB9E9E"; // Couleur de fond grise
-            document.querySelector(".play-btn").style.pointerEvents = "none"; // Désactiver les événements de souris
-            document.querySelector(".play-btn").style.boxShadow = "none";
-            document.querySelector(".play-btn").textContent = "Non whitelist";   ;    
-        }
+    
+        const blockName = document.querySelector('.player-name');
+        blockName.innerHTML = `${account.name}`;
     }
-        
-        if (account.user_info.role.name === this.config.role_data.role1.name) {
-            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role1.background}) black no-repeat center center scroll`;
+
+    async initAdvert() {
+        const response = await fetch('https://launcher.historion.wstr.fr/api/advert.json');
+        const data = await response.json();
+        const advertBanner = document.querySelector('.advert-banner');
+
+        if(data.enabled) {
+            const message = data.message;
+
+            advertBanner.innerHTML = message;
+            advertBanner.style.display = 'block';
+        } else {
+            advertBanner.style.display = 'none'; 
         }
-        if (account.user_info.role.name === this.config.role_data.role2.name) {
-            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role2.background}) black no-repeat center center scroll`;
+    } 
+    
+    async initPlayBtns() {
+        let ram = (await this.database.get('1234', 'ram')).value;
+
+        if(ram.ramMax < 3) {
+            const launchBtn = document.querySelectorAll(".icon-play");
+            document.querySelector('.avert-home').style.display = 'block';
+            launchBtn.forEach(launchBtn => {
+                launchBtn.style.pointerEvents = "none";
+                launchBtn.style.backgroundColor = "#696969";
+                launchBtn.style.boxShadow = "none";
+                document.querySelector('.play-btn').style.fontSize = "15px";
+                document.querySelector('.play-btn').innerHTML = "Ram insuffisante."
+            })
+        } else {
+            document.querySelector('.avert-home').style.display = 'none';
         }
-        if (account.user_info.role.name === this.config.role_data.role3.name) {
-            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role3.background}) black no-repeat center center scroll`;
-        }
-        if (account.user_info.role.name === this.config.role_data.role4.name) {
-            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role4.background}) black no-repeat center center scroll`;
-        }
-        if (account.user_info.role.name === this.config.role_data.role5.name) {
-            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role5.background}) black no-repeat center center scroll`;
-        }
-        if (account.user_info.role.name === this.config.role_data.role6.name) {
-            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role6.background}) black no-repeat center center scroll`;
-        }
-        if (account.user_info.role.name === this.config.role_data.role7.name) {
-            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role7.background}) black no-repeat center center scroll`;
-        }
-        if (account.user_info.role.name === this.config.role_data.role8.name) {
-            document.body.style.background = `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${this.config.role_data.role8.background}) black no-repeat center center scroll`;
-        }
-        
-       
     }
 
     async initLaunch() {
-        document.querySelector('.play-btn').addEventListener('click', async () => {
-            let urlpkg = pkg.user ? `${pkg.url}/${pkg.user}` : pkg.url;
-            let uuid = (await this.database.get('1234', 'accounts-selected')).value;
-            let account = (await this.database.get(uuid.selected, 'accounts')).value;
-            let ram = (await this.database.get('1234', 'ram')).value;
-            let javaPath = (await this.database.get('1234', 'java-path')).value;
-            let javaArgs = (await this.database.get('1234', 'java-args')).value;
-            let Resolution = (await this.database.get('1234', 'screen')).value;
-            let launcherSettings = (await this.database.get('1234', 'launcher')).value;
-            let screen;
+        const playBtns = document.querySelectorAll('.icon-play');
 
-            let playBtn = document.querySelector('.play-btn');
-            let info = document.querySelector(".text-download")
-            let progressBar = document.querySelector(".progress-bar")
-            let latenceBar = document.querySelector(".latence-bar")
-
-            if (Resolution.screen.width == '<auto>') {
-                screen = false
-            } else {
-                screen = {
-                    width: Resolution.screen.width,
-                    height: Resolution.screen.height
+        playBtns.forEach(playBtns => {
+            playBtns.addEventListener('click', async () => {
+                let urlpkg = pkg.user ? `${pkg.url}/${pkg.user}` : pkg.url;
+                let uuid = (await this.database.get('1234', 'accounts-selected')).value;
+                let account = (await this.database.get(uuid.selected, 'accounts')).value;
+                let ram = (await this.database.get('1234', 'ram')).value;
+                let javaPath = (await this.database.get('1234', 'java-path')).value;
+                let javaArgs = (await this.database.get('1234', 'java-args')).value;
+                let Resolution = (await this.database.get('1234', 'screen')).value;
+                let launcherSettings = (await this.database.get('1234', 'launcher')).value;
+                let screen;
+    
+                document.querySelector(".icon-play").style.backgroundColor = "#696969";
+                document.querySelector(".icon-play").style.pointerEvents = "none";
+                document.querySelector(".icon-play").style.boxShadow = "none";
+    
+                let playBtn = document.querySelector('.play-btn');
+                let info = document.querySelector(".text-download")
+                let progressBar = document.querySelector(".progress-bar")
+                let speedDownload = document.querySelector(".speed-download-text")
+                let timeRemaining = document.querySelector('.time-remaining-dl')
+    
+                if (Resolution.screen.width == '<auto>') {
+                    screen = false
+                } else {
+                    screen = {
+                        width: Resolution.screen.width,
+                        height: Resolution.screen.height
+                    }
                 }
-            }
-            
-            let opts = {
-                url: `http://154.51.39.122:50001`,
-                authenticator: account,
-                timeout: 15000,
-                path: `${dataDirectory}/${process.platform == 'darwin' ? this.config.dataDirectory : `.${this.config.dataDirectory}`}`,
-                version: this.config.game_version,
-                detached: launcherSettings.launcher.close === 'close-all' ? false : true,
-                downloadFileMultiple: 20,
-                loader: {
-                    type: this.config.loader.type,
-                    build: this.config.loader.build,
-                    enable: this.config.loader.enable,
-                },
-                verify: this.config.verify,
-                ignored: this.config.ignored,
-
-                java: this.config.java,
-                memory: {
-                    min: `${ram.ramMin * 1024}M`,
-                    max: `${ram.ramMax * 1024}M`
+    
+                let opts = {
+                    url: `https://launcher.historion.wstr.fr/panel/data`,
+                    authenticator: account,
+                    timeout: 15000,
+                    path: `${dataDirectory}/${process.platform == 'darwin' ? this.config.dataDirectory : `.${this.config.dataDirectory}`}`,
+                    version: this.config.game_version,
+                    detached: launcherSettings.launcher.close === 'close-all' ? false : true,
+                    downloadFileMultiple: 20,
+                    loader: {
+                        type: this.config.loader.type,
+                        build: this.config.loader.build,
+                        enable: this.config.loader.enable,
+                    },
+                    verify: this.config.verify,
+                    ignored: this.config.ignored,
+    
+                    java: this.config.java,
+                    memory: {
+                        min: `${ram.ramMin * 1024}M`,
+                        max: `${ram.ramMax * 1024}M`
+                    },
                 }
-            }
-
-            playBtn.style.display = "none"
-            info.style.display = "block"
-            launch.Launch(opts);
-
-            launch.on('extract', extract => {
-                console.log(extract);
-            });
-
-            launch.on('progress', (progress, size) => {
-                progressBar.style.display = "block"
-                document.querySelector(".text-download").innerHTML = `Téléchargement ${((progress / size) * 100).toFixed(0)}%`
-                ipcRenderer.send('main-window-progress', { progress, size })
-                progressBar.value = progress;
-                progressBar.max = size;
-            });
-
-            launch.on('check', (progress, size) => {
-                progressBar.style.display = "block"
-                document.querySelector(".text-download").innerHTML = `Vérification ${((progress / size) * 100).toFixed(0)}%`
-                progressBar.value = progress;
-                progressBar.max = size;
-            });
-
-            launch.on('estimated', (time) => {
-                let hours = Math.floor(time / 3600);
-                let minutes = Math.floor((time - hours * 3600) / 60);
-                let seconds = Math.floor(time - hours * 3600 - minutes * 60);
-                console.log(`${hours}h ${minutes}m ${seconds}s`);
+    
+                playBtn.style.display = "none"
+                info.style.display = "block"
+                launch.Launch(opts);
+    
+                launch.on('extract', extract => {
+                    console.log(extract);
+                });
+    
+                launch.on('progress', (progress, size) => {
+                    progressBar.style.display = "block"
+                    document.querySelector(".text-download").innerHTML = `Téléchargement (${((progress / size) * 100).toFixed(0)}%)`
+                    ipcRenderer.send('main-window-progress', { progress, size })
+                    progressBar.value = progress;
+                    progressBar.max = size;
+                });
+    
+                launch.on('check', (progress, size) => {
+                    progressBar.style.display = "block"
+                    document.querySelector(".text-download").innerHTML = `Vérification (${((progress / size) * 100).toFixed(0)}%)`
+                    progressBar.value = progress;
+                    progressBar.max = size;
+                });
+    
+                launch.on('estimated', (time) => {
+                    let hours = Math.floor(time / 3600);
+                    let minutes = Math.floor((time - hours * 3600) / 60);
+                    let seconds = Math.floor(time - hours * 3600 - minutes * 60);
+                    timeRemaining.style.display = "block"
+                    timeRemaining.innerHTML = `Temps restant : ${hours}h ${minutes}m ${seconds}s`
+                })
+    
+                launch.on('speed', (speed) => {
+                    speedDownload.style.display = "block"
+                    speedDownload.innerHTML = `Vitesse de téléchargement ${(speed / 1067008).toFixed(2)} Mb/s`
+                })
+    
+                launch.on('patch', patch => {
+                    console.log(patch);
+                    info.innerHTML = `Patch en cours...`
+                });
+    
+                launch.on('data', (e) => {
+                    new logger('Minecraft', '#36b030');
+                    if (launcherSettings.launcher.close === 'close-launcher') ipcRenderer.send("main-window-hide");
+                    ipcRenderer.send('main-window-progress-reset')
+                    progressBar.style.display = "none"
+                    timeRemaining.style.display = "none"
+                    speedDownload.style.display = "none"
+                    info.innerHTML = `Demarrage en cours...`
+                    console.log(e);
+                })
+    
+                launch.on('close', code => {
+                    if (launcherSettings.launcher.close === 'close-launcher') ipcRenderer.send("main-window-show");
+                    progressBar.style.display = "none"
+                    info.style.display = "none"
+                    playBtn.style.display = "block"
+                    info.innerHTML = `Vérification`
+                    new logger('Launcher', '#7289da');
+                    console.log('Close');
+                });
+    
+                launch.on('error', err => {
+                    console.log(err);
+                });
             })
-
-            launch.on('speed', (speed) => {
-                console.log(`${(speed / 1067008).toFixed(2)} Mb/s`);
-            })
-
-            launch.on('patch', patch => {
-                console.log(patch);
-                info.innerHTML = `Patch en cours...`
-            });
-
-            launch.on('data', (e) => {
-                new logger('Minecraft', '#36b030');
-                if (launcherSettings.launcher.close === 'close-launcher') ipcRenderer.send("main-window-hide");
-                ipcRenderer.send('main-window-progress-reset')
-                progressBar.style.display = "none"
-                info.innerHTML = `Demarrage en cours...`
-                console.log(e);
-            })
-
-            launch.on('close', code => {
-                if (launcherSettings.launcher.close === 'close-launcher') ipcRenderer.send("main-window-show");
-                progressBar.style.display = "none"
-                info.style.display = "none"
-                playBtn.style.display = "block"
-                info.innerHTML = `Vérification`
-                new logger('Launcher', '#7289da');
-                console.log('Close');
-            });
-
-            launch.on('error', err => {
-                console.log(err);
-            });
         })
-    }
+    }  
+
+    async initVideo() {
+        const response = await fetch('https://launcher.historion.wstr.fr/api/video.json');
+        const data = await response.json();
+
+        const youtubeVideoId = data.video_id;
+        const youtubeThumbnailUrl = `https://img.youtube.com/vi/${youtubeVideoId}/hqdefault.jpg`;
+        const videoContainer = document.querySelector('.youtube-thumbnail');
+        const thumbnailImg = videoContainer.querySelector('.thumbnail-img');
+        const playButton = videoContainer.querySelector('.ytb-play-btn');
+
+        const videoCredits = document.querySelector('.video-credits');
+
+        const videoAuthor = data.author;
+
+        videoCredits.innerHTML = `Vidéo créée par ${videoAuthor}`
+
+        const btn = document.querySelector('.ytb-btn');
+
+        btn.addEventListener('click', () => {
+            shell.openExternal(`https:/youtube.com/watch?v=${youtubeVideoId}`);
+        });
+    
+        if (thumbnailImg && playButton) {
+            thumbnailImg.src = youtubeThumbnailUrl;
+    
+            videoContainer.addEventListener('click', () => {
+                videoContainer.innerHTML = `<iframe width="500" height="290" src="https://www.youtube.com/embed/${youtubeVideoId}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
+            });
+        }
+    }    
 
     async initStatusServer() {
         let nameServer = document.querySelector('.server-text .name');
@@ -283,8 +314,7 @@ class Home {
     }
 
     initBtn() {
-        let settings_url = pkg.user ? `${pkg.settings}/${pkg.user}` : pkg.settings
-        document.querySelector('.settings-btn').addEventListener('click', () => {
+        document.querySelector('.set-btn').addEventListener('click', () => {
             changePanel("settings");
         });
 
@@ -292,19 +322,17 @@ class Home {
             changePanel("home");
         });
 
-        document.getElementById("discord").addEventListener("click", function() {
-            window.open("https://discord.gg/smxDYcDks2", "_blank");
+        document.querySelector('.discord').addEventListener('click', () => {
+            shell.openExternal("https://discord.gg/SNJA52uEYH");
         });
 
-        document.getElementById("boutique").addEventListener("click", function() {
-            window.open("https://historion-mc.fr/shop", "_blank");
+        document.querySelector('.site').addEventListener('click', () => {
+            shell.openExternal("https://luminaria-mc.fr");
         });
 
-        document.getElementById("vote").addEventListener("click", function() {
-            window.open("https://historion-mc.fr/vote", "_blank");
+        document.querySelector('.wiki').addEventListener('click', () => {
+            shell.openExternal("https://luminaria-mc.fr/wiki");
         });
-        
-        
     }
 
     async getdate(e) {

@@ -8,7 +8,12 @@
 import { database, changePanel, accountSelect, Slider } from '../utils.js';
 const dataDirectory = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Application Support' : process.env.HOME)
 
-const os = require('os');
+const os = require('os')
+const websiteUrl = 'https://luminaria-mc.fr';
+const fetch = require('node-fetch');
+const path = require('path')
+const fs = require('fs')
+const { ipcRenderer, shell } = require('electron');
 
 class Settings {
     static id = "settings";
@@ -20,9 +25,12 @@ class Settings {
         this.initAccount();
         this.initRam();
         this.initLauncherSettings();
+        this.initSkin();
+        this.updateModsConfig();
+        this.initOptionalMods();
     }
 
-    initAccount() {
+    async initAccount() {
         document.querySelector('.accounts').addEventListener('click', async(e) => {
             let uuid = e.target.id;
             let selectedaccount = await this.database.get('1234', 'accounts-selected');
@@ -58,6 +66,163 @@ class Settings {
         })
     }
 
+    async updateModsConfig() {
+        const modsDir = path.join(dataDirectory, '.historion', 'mods');
+        const launcherConfigDir = path.join(dataDirectory, '.historion', 'launcher_config');
+        const modsConfigFile = path.join(launcherConfigDir, 'mods_config.json');
+    
+        const response = await fetch('https://launcher.historion.wstr.fr/api/mods.json');
+        const apiMods = await response.json();
+        const apiModsSet = new Set(apiMods.optionalMods);
+    
+        let localModsConfig;
+        try {
+            localModsConfig = JSON.parse(fs.readFileSync(modsConfigFile));
+        } catch (error) {
+            await this.createModsConfig(modsConfigFile);
+            localModsConfig = JSON.parse(fs.readFileSync(modsConfigFile));
+        }
+    
+        for (const localMod in localModsConfig) {
+            if (!apiModsSet.has(localMod)) {
+                if (!localModsConfig[localMod]) {
+                    const modFiles = fs.readdirSync(modsDir).filter(file => file.startsWith(localMod) && file.endsWith('.jar-disable'));
+                    if (modFiles.length > 0) {
+                        const modFile = modFiles[0];
+                        const modFilePath = path.join(modsDir, modFile);
+                        const newModFilePath = modFilePath.replace('.jar-disable', '.jar');
+                        fs.renameSync(modFilePath, newModFilePath);
+                    }
+                }
+                delete localModsConfig[localMod];
+            }
+        }
+    
+        apiMods.optionalMods.forEach(apiMod => {
+            if (!(apiMod in localModsConfig)) {
+                localModsConfig[apiMod] = true;
+            }
+        });
+    
+        fs.writeFileSync(modsConfigFile, JSON.stringify(localModsConfig, null, 2));
+    }    
+
+    async initOptionalMods() {
+        const modElement = document.createElement('div');
+        const modsDir = path.join(dataDirectory, '.historion', 'mods');
+        const launcherConfigDir = path.join(dataDirectory, '.historion', 'launcher_config');
+        const modsConfigFile = path.join(launcherConfigDir, 'mods_config.json');
+        const modsListElement = document.getElementById('mods-list');
+
+        if (!fs.existsSync(modsDir) || fs.readdirSync(modsDir).length === 0) {
+            modElement.innerHTML = `
+            <div class="mods-container">
+              <h2>Les mods n'ont pas encore étés téléchargés. Veuillez lancer une première fois le jeu pour configurer les mods optionnels.<h2>
+            </div>`
+            if (!fs.existsSync(launcherConfigDir)) {
+                fs.mkdirSync(launcherConfigDir, { recursive: true });
+            }
+            await this.createModsConfig(modsConfigFile);
+        } else {
+            await this.displayMods(modsConfigFile, modsDir, modsListElement);
+        }
+    }
+
+    async createModsConfig(modsConfigFile) {
+        const response = await fetch('https://launcher.historion.wstr.fr/api/mods.json');
+        const data = await response.json();
+        const modsConfig = {};
+    
+        data.optionalMods.forEach(mod => {
+            modsConfig[mod] = true;
+        });
+    
+        fs.writeFileSync(modsConfigFile, JSON.stringify(modsConfig, null, 2));
+    }    
+
+    async displayMods(modsConfigFile, modsDir, modsListElement) {
+        let modsConfig;
+    
+        try {
+            modsConfig = JSON.parse(fs.readFileSync(modsConfigFile));
+        } catch (error) {
+            await this.createModsConfig(modsConfigFile);
+            modsConfig = JSON.parse(fs.readFileSync(modsConfigFile));
+        }
+    
+        const response = await fetch('https://launcher.historion.wstr.fr/api/mods.json');
+        const data = await response.json();
+    
+        if (!data.optionalMods || !data.mods) {
+            console.error('La réponse API ne contient pas "optionalMods" ou "mods".');
+            return;
+        }
+    
+        data.optionalMods.forEach(mod => {
+            const modElement = document.createElement('div');
+            const modInfo = data.mods[mod];
+            if (!modInfo) {
+                console.error(`Les informations pour le mod "${mod}" sont manquantes dans "mods".`);
+                modElement.innerHTML = `
+                <div class="mods-container">
+                  <h2>Les informations pour le mod ${mod} n'ont pas étés mises par les administrateurs.<h2>
+                   <div class="switch">
+                      <input type="checkbox" id="${mod}" name="mod" value="${mod}" ${modsConfig[mod] ? 'checked' : ''}>
+                      <label class="switch-label" for="${mod}"></label>
+                  </div>
+                </div>`;
+                return;
+            }
+        
+            const modName = modInfo.name;
+            const modDescription = modInfo.description;
+            const modLink = modInfo.icon;
+            const modRecommanded = modInfo.recommanded;
+        
+            modElement.innerHTML = `
+                <div class="mods-container">
+                  <img src="${modLink}" class="mods-icon" alt="${modName} logo">
+                  <div class="mods-container-text">
+                    <div class="mods-container-name">                    
+                        <h2>${modName}</h2>
+                        <div class="mods-recommanded" style="display: none;">Recommandé</div>
+                    </div>
+                    <div class="mod-description">${modDescription}</div>
+                  </div>
+                  <div class="switch">
+                    <input type="checkbox" id="${mod}" name="mod" value="${mod}" ${modsConfig[mod] ? 'checked' : ''}>
+                    <label class="switch-label" for="${mod}"></label>
+                  </div>
+                </div>
+            `;
+        
+            if (modRecommanded) {
+                modElement.querySelector('.mods-recommanded').style.display = 'block';
+            }
+        
+            modElement.querySelector('input').addEventListener('change', (e) => {
+                this.toggleMod(mod, e.target.checked, modsConfig, modsDir, modsConfigFile);
+            });
+        
+            modsListElement.appendChild(modElement);
+        });        
+    }        
+
+    async toggleMod(mod, enabled, modsConfig, modsDir, modsConfigFile) {
+        const modFiles = fs.readdirSync(modsDir).filter(file => file.startsWith(mod) && (file.endsWith('.jar') || file.endsWith('.jar-disable')));
+    
+        if (modFiles.length > 0) {
+            const modFile = modFiles[0];
+            const modFilePath = path.join(modsDir, modFile);
+            const newModFilePath = enabled ? modFilePath.replace('.jar-disable', '.jar') : modFilePath.replace('.jar', '.jar-disable');
+    
+            fs.renameSync(modFilePath, newModFilePath);
+    
+            modsConfig[mod] = enabled;
+            fs.writeFileSync(modsConfigFile, JSON.stringify(modsConfig, null, 2));
+        }
+    }
+      
     async initRam() {
         let ramDatabase = (await this.database.get('1234', 'ram'))?.value;
         let totalMem = Math.trunc(os.totalmem() / 1073741824 * 10) / 10;
@@ -140,7 +305,84 @@ class Settings {
             }
         });
     }
+  
+    async initSkin() {
+        let uuid = (await this.database.get('1234', 'accounts-selected')).value;
+        let account = (await this.database.get(uuid.selected, 'accounts')).value;
 
+        let title = document.querySelector('.player-skin-title');
+        title.innerHTML = `Skin de ${account.name}`;
+
+        const skin = document.querySelector('.skin-renderer-settings');
+        const url = `https://minerender.org/embed/skin/?skin.url=${websiteUrl}/api/skin-api/skins/${account.name}&amp;autoResize=true&amp;shadow=true&amp;camera.position=-15,35,20&amp;controls.pan=false&amp;controls.zoom=false&amp;controls.enabled=false&amp;utm_source=mineskin&amp;utm_medium=website&amp;utm_campaign=skin_gen_url`
+        skin.src = url;
+    }
+
+    async selectFile() {
+        const input = document.getElementById('fileInput');
+        input.click();
+    
+        input.onchange = async () => {
+            const file = input.files[0];
+            if (!file) return;
+    
+            console.log(`Selected file: ${file.name}, type: ${file.type}`);
+    
+            if (file.type !== 'image/png') {
+                alert('The file must be a PNG image.');
+                return;
+            }
+    
+            const img = new Image();
+            img.src = URL.createObjectURL(file);
+            img.onload = async () => {
+                console.log(`Image dimensions: ${img.width}x${img.height}`);
+    
+                if (img.width !== 64 || img.height !== 64) {
+                    alert('The image must be 64x64 pixels.');
+                    return;
+                }
+    
+                await this.processSkinChange(file);
+            };
+        };
+    }
+    
+    async processSkinChange(file) {
+        let uuid = (await this.database.get('1234', 'accounts-selected')).value;
+        let account = (await this.database.get(uuid.selected, 'accounts')).value;
+        const access_token = account.access_token;
+    
+        console.log(`Token: ${access_token}`);
+        console.log(`File to upload: ${file.name}`);
+    
+        const formData = new FormData();
+        formData.append('access_token', access_token);
+        formData.append('skin', file);
+    
+        console.log('FormData prepared:', formData);
+    
+        try {
+            const response = await fetch(`${websiteUrl}/api/skin-api/skins/update`, {
+                method: 'POST',
+                body: formData
+            });
+    
+            const responseBody = await response();
+    
+            console.log('Response status:', response.status);
+            console.log('Response body:', responseBody);
+    
+            if (response.ok) {
+                console.log('Skin updated successfully!');
+            } else {
+                console.error('Failed to update skin. Response body:', responseBody);
+            }
+        } catch (error) {
+            console.error('Error while updating skin:', error);
+        }
+    }    
+    
     async initResolution() {
         let resolutionDatabase = (await this.database.get('1234', 'screen'))?.value?.screen;
         let resolution = resolutionDatabase ? resolutionDatabase : { width: "1280", height: "720" };
@@ -235,16 +477,15 @@ class Settings {
             changePanel("home");
         });
 
-        document.querySelector('.home-btn-2').addEventListener('click', () => {
+        document.querySelector('.home-btn').addEventListener('click', () => {
             document.querySelector('.default-tab-btn').click();
             changePanel("home");
         });
     
         document.getElementById("github").addEventListener("click", function() {
-            window.open("https://github.com/Boulldog0/Historion-Launcher", "_blank");
+            shell.openExternal("https://github.com/Boulldog0/LuminariaLauncher");
         });
     }
-    
 
     async initSettingsDefault() {
         if (!(await this.database.getAll('accounts-selected')).length) {
@@ -269,7 +510,7 @@ class Settings {
         }
 
         if (!(await this.database.getAll('ram')).length) {
-            this.database.add({ uuid: "1234", ramMin: "1", ramMax: "2" }, 'ram')
+            this.database.add({ uuid: "1234", ramMin: "1", ramMax: "3" }, 'ram')
         }
 
         if (!(await this.database.getAll('screen')).length) {

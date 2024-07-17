@@ -5,16 +5,21 @@
             <div class="green-point"></div>
         </div>
         <div class="little-bar-home">
-            <button class="home-btn-2 icon-home"></button>
+          <button class="home-btn icon-home"></button>
+          <button class="set-btn icon-settings"></button>
         </div>
-        <button class="settings-btn icon-settings"></button>
-      </div>
-    </div>
+     </div>
     <div class="tabs-settings-btn">
-        <button style="margin-top: 40px;" class="icon-users tab-btn-css tab-btn active-tab-btn default-tab-btn" > Comptes</button>
-        <button class="icon-terminal tab-btn-css tab-btn"> Paramètres du jeu</button>
+        <div class="set-title">Paramètres</div>
+        <div class="separator"></div>
+        <button style="margin-top: 40px;" class="icon-users tab-btn-css tab-btn active-tab-btn" > Comptes</button>
+        <button class="icon-terminal tab-btn-css tab-btn default-tab-btn"> RAM Allouée</button>
+        <button class="icon-skin tab-btn-css tab-btn"> Skin</button>
+        <button class="icon-mods tab-btn-css tab-btn"> Mods optionels</button>
+        <button class="icon-console tab-btn-css tab-btn"> Console</button>
         <button class="icon-wrench tab-btn-css tab-btn"> Launcher</button>
         <br>
+        <div class="separator"></div>
         <br>
         <button class="tab-btn-css-settings save-tabs-btn"> Sauvegarder</button>
         <button id="github" class="icon-github tab-btn-git"> GitHub</button>
@@ -22,6 +27,7 @@
 
     <div class="tabs-settings-content active-tab-content">
         <div class="center-align">
+            <div class="title-settings">Gestion des comptes</div>
             <button class="add-account">Ajouter un compte</button>
             <div class="accounts"></div>
         </div>
@@ -29,7 +35,7 @@
 
     <div class="tabs-settings-content">
         <div class="settings-content-scroll">
-            <div class="title-settings">Paramètres de votre RAM.</div>
+            <div class="title-settings">Paramètres de votre RAM</div>
             <div class="avert">
                 <div class="information">❗ Important : Allouer beaucoup de RAM a votre jeu est essentiel. En effet, celui si ne pourra pas fonctionner correctement avec moins de 3 GO de ram alloué.</div>
             </div>
@@ -64,10 +70,57 @@
             <br>
         </div>
     </div>
+
+
+    <div class="tabs-settings-content">
+        <div class="player-skin-title title-settings"></div>
+        <div class="center-page">
+            <div class="skin-container-settings">
+                <iframe frameborder="0" id="skinRender2" class="skin-renderer-settings" style="min-height: min(40vw, 40vh); max-height: 500px; min-width: 200px; max-width: 220px;" src=""></iframe>
+                <input type="file" id="fileInput" accept="image/png" style="display: none;">  
+                <div class="java-settings">
+                    <div class="information">
+                        Note : Le changement de skin via le launcher arrivera dans une prochaine mise à jour ^^
+                    </div>
+                </div>           
+            </div>
+        </div>
+    </div>
+
+    <div class="tabs-settings-content">
+        <div class="settings-content-scroll">
+            <div class="center-page">
+                <div class="title-settings">Mods Optionnels</div>
+                <div class="mods-info">
+                    <div class="information">
+                        Explications : Les mods présents dans cette fenêtre sont dits "optionnels", ce qui veut dire qu'ils ne sont pas obligatoire pour vous connecter
+                        au serveur et que vous pouvez choisir de lancer votre jeu avec ou non. Lorsque le curseur est sur vert, cela signifie que le mod sera bien lancé avec
+                        le jeu. Sinon, cela veut dire qu'il est désactivé et que ce mod ne sera pas lancé avec le reste de votre jeu.
+
+                        Si un mod est marqué comme "recommandé", cela signifie que les développeurs pensent qu'il est mieux pour votre experience de jeu que vous le possédiez.
+                    </div>
+                    <div class="mods-list" id="mods-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tabs-settings-content">
+        <div class="settings-content-scroll">
+            <div class="center-page">
+                <div class="title-settings">Console</div>
+                <div class="console-bg">
+                    <div class="console-log-counter"></div>
+                    <div class="console"></div>
+                    <button class="console-clear-btn">Supprimer les logs</button>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <div class="tabs-settings-content">
         <div class="center-page">
-            <div class="title-settings">Paramètre après le lancement du jeu.</div>
+            <div class="title-settings">Paramètre après le lancement du jeu</div>
             <div class="java-settings">
             <div class="information">
                 <br>
